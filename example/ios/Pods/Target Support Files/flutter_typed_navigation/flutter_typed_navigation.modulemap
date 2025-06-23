@@ -1,0 +1,6 @@
+framework module flutter_typed_navigation {
+  umbrella header "flutter_typed_navigation-umbrella.h"
+
+  export *
+  module * { export * }
+}

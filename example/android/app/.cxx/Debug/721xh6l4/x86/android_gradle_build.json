@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "/Users/kamu/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/kamu/Library/Developer/Xamarin/android-sdk-macosx/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/android/app/.cxx/Debug/721xh6l4/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/kamu/Library/Developer/Xamarin/android-sdk-macosx/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/android/app/.cxx/Debug/721xh6l4/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {},
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/kamu/Library/Developer/Xamarin/android-sdk-macosx/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/kamu/Library/Developer/Xamarin/android-sdk-macosx/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": []
+}

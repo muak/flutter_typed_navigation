@@ -1,0 +1,18 @@
+{
+  "" : {
+    "diagnostics" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/flutter_typed_navigation-master.dia",
+    "emit-module-dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/flutter_typed_navigation-master-emit-module.d",
+    "emit-module-diagnostics" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/flutter_typed_navigation-master-emit-module.dia",
+    "swift-dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/flutter_typed_navigation-master.swiftdeps"
+  },
+  "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/ios/Classes/FlutterTypedNavigationPlugin.swift" : {
+    "const-values" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin.swiftconstvalues",
+    "dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin.d",
+    "diagnostics" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin.o",
+    "llvm-bc" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin.bc",
+    "object" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin.o",
+    "swift-dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin.swiftdeps",
+    "swiftmodule" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/flutter_typed_navigation.build/Objects-normal/arm64/FlutterTypedNavigationPlugin~partial.swiftmodule"
+  }
+}

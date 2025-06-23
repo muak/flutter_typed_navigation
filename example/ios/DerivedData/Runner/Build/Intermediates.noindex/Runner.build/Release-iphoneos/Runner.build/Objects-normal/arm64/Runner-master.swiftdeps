@@ -1,0 +1,8 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "f6fef38db20c20703d8b6e96f54f443d238325ae4171b994f6b9f605fe6a7893"
+build_start_time: [1750603149, 717699000]
+build_end_time: [1750603160, 76014000]
+inputs:
+  ? "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Release-iphoneos/Runner.build/DerivedSources/GeneratedAssetSymbols.swift"
+  : [1750603149, 700397192]
+  "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/Runner/AppDelegate.swift": [1750601964, 186196524]

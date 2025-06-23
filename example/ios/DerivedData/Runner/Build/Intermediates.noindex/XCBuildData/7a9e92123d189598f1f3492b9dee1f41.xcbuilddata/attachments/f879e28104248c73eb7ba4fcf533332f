@@ -1,0 +1,28 @@
+{
+  "" : {
+    "diagnostics" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/Runner-master.dia",
+    "emit-module-dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/Runner-master-emit-module.d",
+    "emit-module-diagnostics" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/Runner-master-emit-module.dia",
+    "swift-dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/Runner-master.swiftdeps"
+  },
+  "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/Runner/AppDelegate.swift" : {
+    "const-values" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate.d",
+    "diagnostics" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate.o",
+    "llvm-bc" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate.bc",
+    "object" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate.o",
+    "swift-dependencies" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate.swiftdeps",
+    "swiftmodule" : "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/ios/DerivedData/Runner/Build/Intermediates.noindex/Runner.build/Debug-iphoneos/Runner.build/Objects-normal/arm64/AppDelegate~partial.swiftmodule"
+  }
+}

@@ -1,0 +1,10 @@
+framework module flutter_typed_navigation {
+  umbrella header "flutter_typed_navigation-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module flutter_typed_navigation.__Swift {
+  exclude header "flutter_typed_navigation-Swift.h"
+}

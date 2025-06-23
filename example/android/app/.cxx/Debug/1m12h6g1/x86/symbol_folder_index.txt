@@ -1,0 +1,1 @@
+/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/build/app/intermediates/cxx/Debug/1m12h6g1/obj/x86

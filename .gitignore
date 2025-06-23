@@ -1,0 +1,73 @@
+# Flutter/Dart specific
+# Files and directories created by pub
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+pubspec.lock
+
+# IDE specific
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# macOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+
+# Android specific
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/debug
+android/app/profile
+android/app/release
+android/gradle/
+android/gradlew
+android/gradlew.bat
+
+# iOS specific
+ios/DerivedData/
+ios/Runner.xcworkspace/xcuserdata/
+ios/Podfile.lock
+ios/Pods/
+ios/.symlinks/
+
+# Web specific
+web/packages/
+
+# Test related
+coverage/
+test_driver/
+
+# Platform specific build outputs
+*.apk
+*.aab
+*.ipa
+
+# Code generation
+*.freezed.dart
+*.g.dart
+*.config.dart
+*.mocks.dart
+
+# Local configuration files
+.env
+.env.local
+.env.*.local
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build outputs
+*.dSYM.zip
+*.dSYM
