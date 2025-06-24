@@ -14,8 +14,7 @@ class WidgetMockAScreen extends WidgetMockScreenBase {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(widgetMockAViewModelProvider.notifier);
-    final state = ref.watch(widgetMockAViewModelProvider);
+    final viewModel = ref.watch(widgetMockAViewModelProvider);
     
     return Scaffold(
       appBar: AppBar(
@@ -52,8 +51,7 @@ class WidgetMockBScreen extends WidgetMockScreenBase {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(widgetMockBViewModelProvider(parameter).notifier);
-    final state = ref.watch(widgetMockBViewModelProvider(parameter));
+    final viewModel = ref.watch(widgetMockBViewModelProvider(parameter));
     
     return Scaffold(
       appBar: AppBar(
@@ -100,8 +98,7 @@ class WidgetMockCScreen extends WidgetMockScreenBase {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(widgetMockCViewModelProvider(parameter).notifier);
-    final state = ref.watch(widgetMockCViewModelProvider(parameter));
+    final viewModel = ref.watch(widgetMockCViewModelProvider(parameter));
     
     return Scaffold(
       appBar: AppBar(
@@ -148,8 +145,7 @@ class WidgetMockTabRootScreen extends WidgetMockScreenBase {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(widgetMockTabRootViewModelProvider.notifier);
-    final state = ref.watch(widgetMockTabRootViewModelProvider);
+    final viewModel = ref.watch(widgetMockTabRootViewModelProvider);
     
     return DefaultTabController(
       length: 3,

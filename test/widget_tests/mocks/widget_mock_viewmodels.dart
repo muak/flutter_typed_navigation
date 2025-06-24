@@ -3,9 +3,9 @@ import 'package:riverpod/riverpod.dart';
 import '../../../lib/src/viewmodel_core.dart';
 import '../../mocks/test_parameter.dart';
 
-/// Widget Test用のMock ViewModel基底ミックスイン
+/// Widget Test用のMock ViewModel基底クラス
 /// 実際のViewModelCoreミックスインを使用してライフサイクルを管理
-mixin WidgetMockViewModelMixin on StateNotifier {
+abstract class WidgetMockViewModelBase with ViewModelCore {
   bool _isDestroyed = false;
   bool _isActive = false;
   Object? _parameters;
@@ -87,23 +87,15 @@ mixin WidgetMockViewModelMixin on StateNotifier {
 }
 
 /// Mock A ViewModel（パラメータなし）
-class WidgetMockAViewModel extends StateNotifier<WidgetMockAViewModelState> 
-    with WidgetMockViewModelMixin, ViewModelCore {
-  
-  WidgetMockAViewModel() : super(WidgetMockAViewModelState()) {
+class WidgetMockAViewModel extends WidgetMockViewModelBase {
+  WidgetMockAViewModel() {
     actionLogQueue.add('initializeAsync');
   }
-}
-
-class WidgetMockAViewModelState {
-  const WidgetMockAViewModelState();
 }
 
 /// Mock B ViewModel（パラメータあり）
-class WidgetMockBViewModel extends StateNotifier<WidgetMockBViewModelState> 
-    with WidgetMockViewModelMixin, ViewModelCore {
-  
-  WidgetMockBViewModel(TestParameter? parameter) : super(WidgetMockBViewModelState()) {
+class WidgetMockBViewModel extends WidgetMockViewModelBase {
+  WidgetMockBViewModel(TestParameter? parameter) {
     setParameters(parameter);
     actionLogQueue.add('initializeAsync');
     
@@ -113,17 +105,11 @@ class WidgetMockBViewModel extends StateNotifier<WidgetMockBViewModelState>
       return;
     }
   }
-}
-
-class WidgetMockBViewModelState {
-  const WidgetMockBViewModelState();
 }
 
 /// Mock C ViewModel（パラメータあり）
-class WidgetMockCViewModel extends StateNotifier<WidgetMockCViewModelState> 
-    with WidgetMockViewModelMixin, ViewModelCore {
-  
-  WidgetMockCViewModel(TestParameter? parameter) : super(WidgetMockCViewModelState()) {
+class WidgetMockCViewModel extends WidgetMockViewModelBase {
+  WidgetMockCViewModel(TestParameter? parameter) {
     setParameters(parameter);
     actionLogQueue.add('initializeAsync');
     
@@ -135,36 +121,26 @@ class WidgetMockCViewModel extends StateNotifier<WidgetMockCViewModelState>
   }
 }
 
-class WidgetMockCViewModelState {
-  const WidgetMockCViewModelState();
-}
-
 /// Mock Tab Root ViewModel
-class WidgetMockTabRootViewModel extends StateNotifier<WidgetMockTabRootViewModelState> 
-    with WidgetMockViewModelMixin, ViewModelCore {
-  
-  WidgetMockTabRootViewModel() : super(WidgetMockTabRootViewModelState()) {
+class WidgetMockTabRootViewModel extends WidgetMockViewModelBase {
+  WidgetMockTabRootViewModel() {
     actionLogQueue.add('initializeAsync');
   }
 }
 
-class WidgetMockTabRootViewModelState {
-  const WidgetMockTabRootViewModelState();
-}
-
 /// Riverpod Providers
-final widgetMockAViewModelProvider = StateNotifierProvider<WidgetMockAViewModel, WidgetMockAViewModelState>((ref) {
+final widgetMockAViewModelProvider = Provider<WidgetMockAViewModel>((ref) {
   return WidgetMockAViewModel();
 });
 
-final widgetMockBViewModelProvider = StateNotifierProvider.family<WidgetMockBViewModel, WidgetMockBViewModelState, TestParameter?>((ref, param) {
+final widgetMockBViewModelProvider = Provider.family<WidgetMockBViewModel, TestParameter?>((ref, param) {
   return WidgetMockBViewModel(param);
 });
 
-final widgetMockCViewModelProvider = StateNotifierProvider.family<WidgetMockCViewModel, WidgetMockCViewModelState, TestParameter?>((ref, param) {
+final widgetMockCViewModelProvider = Provider.family<WidgetMockCViewModel, TestParameter?>((ref, param) {
   return WidgetMockCViewModel(param);
 });
 
-final widgetMockTabRootViewModelProvider = StateNotifierProvider<WidgetMockTabRootViewModel, WidgetMockTabRootViewModelState>((ref) {
+final widgetMockTabRootViewModelProvider = Provider<WidgetMockTabRootViewModel>((ref) {
   return WidgetMockTabRootViewModel();
 });
