@@ -55,6 +55,7 @@ test_driver/
 *.g.dart
 *.config.dart
 *.mocks.dart
+*.gen.dart
 
 # Local configuration files
 .env
@@ -71,3 +72,6 @@ test_driver/
 # Build outputs
 *.dSYM.zip
 *.dSYM
+
+# NDK
+android/app/.cxx/ 

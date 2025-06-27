@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../mock_viewmodels/mock_a_viewmodel.dart';
-import 'mock_screen_base.dart';
 
-class MockAScreen extends MockScreenBase {
-  MockAScreen({super.key, MockAViewModel? viewModel}) 
-      : super(viewModel: viewModel ?? MockAViewModel());
+class MockAScreen extends ConsumerWidget {
+  const MockAScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return super.build(context, ref);
+    final state = ref.watch(mockAViewModelProvider);
+    final viewModel = ref.read(mockAViewModelProvider.notifier);
+    return Text(
+      state.value,
+    );
   }
 }

@@ -108,8 +108,8 @@ class AppRouterDelegate extends RouterDelegate<Empty>
         _pagesStack.clear();
         _tabsCache.clear();
         _navService.pageBuildCompleters.clear();
-        // フラグを解除する
-        _navService.setShouldClearCache(false);
+        // // フラグを解除する
+        // _navService.setShouldClearCache(false);
       }
       notifyListeners();
     });
@@ -121,7 +121,6 @@ class AppRouterDelegate extends RouterDelegate<Empty>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -130,14 +129,18 @@ class AppRouterDelegate extends RouterDelegate<Empty>
         // ignore: invalid_use_of_protected_member
         viewModel.onInActiveInternal();
       }
-      // ignore: invalid_use_of_protected_member
-      viewModels.first.onActiveInternal();
+      
+      if (viewModels.isNotEmpty) {
+        // ignore: invalid_use_of_protected_member
+        viewModels.first.onActiveInternal();
+      }
       final pageId = _navService.getCurrentPageId();
       if (_navService.pageBuildCompleters.containsKey(pageId)) {
         _navService.pageBuildCompleters[pageId]?.complete(true);
         _navService.pageBuildCompleters.remove(pageId);
       }
-    });
+    });   
+
     final pages = _buildOrLoadPages().toList();
 
     return Navigator(
@@ -274,9 +277,9 @@ class AppRouterDelegate extends RouterDelegate<Empty>
         return Navigator(
           key: entry.navigatorKey,
           pages: pages,
-          onDidRemovePage: (page) {            
+          onDidRemovePage: (page) {
             // Navigatorスタック自体が存在しない場合（親が削除された場合）は何もしない
-            if (!_pagesStack.containsKey(entry.pageId)) return;            
+            if (!_pagesStack.containsKey(entry.pageId)) return;
 
             final key = page.key.toStringValue();
             _pagesStack[entry.pageId]!.remove(page);

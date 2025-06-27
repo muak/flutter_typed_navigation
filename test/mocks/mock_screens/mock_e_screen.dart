@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../mock_viewmodels/mock_e_viewmodel.dart';
-import 'mock_screen_base.dart';
 
-class MockEScreen extends MockScreenBase {
-  MockEScreen({super.key, MockEViewModel? viewModel}) 
-      : super(viewModel: viewModel ?? MockEViewModel());
+class MockEScreen extends ConsumerWidget {
+  const MockEScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return super.build(context, ref);
+    final viewModel = ref.read(mockEViewModelProvider.notifier);
+    return SizedBox.shrink();
   }
 }

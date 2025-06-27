@@ -53,7 +53,7 @@ void main() {
     // 相対遷移テスト用ルート
     .addNavigator((routeBuilder){
       routeBuilder
-        .addPage<HomeViewModel>();
+        .addPage<AlphaParamViewModel>(param: AlphaParam('Hello'));
     })
     .setRoutes();
 

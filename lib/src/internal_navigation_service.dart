@@ -165,9 +165,9 @@ class InternalNavigationService extends Notifier<NavigationState>
   }
 
   void closeModalInternal() {
-    final tmpState =
-        state.copyWith(stack: [...state.stack.removeLastImmutable()]);
-    state = tmpState.copyWithUpdateCurrentPageBuildFlag(true);
+    state = state.copyWith(
+        stack: [...state.stack.removeLastImmutable()],
+        shouldClearCache: false).copyWithUpdateCurrentPageBuildFlag(true);
   }
 
   void setShouldClearCache(bool shouldClearCache) {
@@ -277,7 +277,10 @@ class InternalNavigationService extends Notifier<NavigationState>
     );
     final completer = Completer<bool>();
     pageBuildCompleters[pageEntry.pageId] = completer;
-    state = state.copyWithAddPageToCurrentNavigator(pageEntry);
+    // ページを追加する
+    state = state
+        .copyWithAddPageToCurrentNavigator(pageEntry)
+        .copyWith(shouldClearCache: false);
     await completer.withTimeout(Duration(milliseconds: 500), false,
         onTimeout: () {
       debugPrint('pageBuildCompleters[${pageEntry.pageId}] timeout');
@@ -305,7 +308,8 @@ class InternalNavigationService extends Notifier<NavigationState>
     final completer = Completer<bool>();
     pageBuildCompleters[targetPageId] = completer;
     // モーダルスタックに追加する
-    state = state.copyWith(stack: [...state.stack, navigatorEntry]);
+    state = state.copyWith(
+        stack: [...state.stack, navigatorEntry], shouldClearCache: false);
     // ページがbuildされるまで待つ
     await completer.withTimeout(Duration(milliseconds: 500), false,
         onTimeout: () {
@@ -349,7 +353,8 @@ class InternalNavigationService extends Notifier<NavigationState>
     final completer = Completer<bool>();
     pageBuildCompleters[targetPageId] = completer;
     // モーダルスタックに追加する
-    state = state.copyWith(stack: [...state.stack, tabEntry]);
+    state = state
+        .copyWith(stack: [...state.stack, tabEntry], shouldClearCache: false);
     // ページがbuildされるまで待つ
     await completer.withTimeout(Duration(milliseconds: 500), false,
         onTimeout: () {
@@ -369,7 +374,8 @@ class InternalNavigationService extends Notifier<NavigationState>
         throw Exception(
             'stack has insufficient elements (${state.stack.length}) to get previous page');
       }
-      final targetPageId = state.stack[state.stack.length - 2].getCurrentEntry().pageId;
+      final targetPageId =
+          state.stack[state.stack.length - 2].getCurrentEntry().pageId;
       pageBuildCompleters[targetPageId] = completer;
 
       closeModalInternal();
@@ -389,7 +395,9 @@ class InternalNavigationService extends Notifier<NavigationState>
       pageBuildCompleters[firstChild.pageId] = completer;
 
       // PopToRoot処理実行
-      state = state.copyWithKeepOnlyFirstChildOfCurrentNavigator();
+      state = state
+          .copyWithKeepOnlyFirstChildOfCurrentNavigator()
+          .copyWith(shouldClearCache: false);
 
       await completer.withTimeout(Duration(milliseconds: 500), false,
           onTimeout: () {
@@ -412,7 +420,7 @@ class InternalNavigationService extends Notifier<NavigationState>
 
       pop(currentPageId);
 
-      await completer.withTimeout(Duration(milliseconds: 500), false,
+      await completer.withTimeout(Duration(milliseconds: 1500), false,
           onTimeout: () {
         debugPrint('pageBuildCompleters[$currentPageId] timeout');
       });
@@ -482,16 +490,20 @@ class InternalNavigationService extends Notifier<NavigationState>
   void pop(String pageId) {
     final path = findEntryWithPath(pageId);
     if (path == null) return;
-    final tmpState = state.copyWithRemoveEntry(path);
-    state = tmpState.copyWithUpdateCurrentPageBuildFlag(true);
+    state = state
+        .copyWithRemoveEntry(path)
+        .copyWithUpdateCurrentPageBuildFlag(true)
+        .copyWith(shouldClearCache: false);
   }
 
   void systemPop(String pageId) {
     final path = findEntryWithPath(pageId);
     if (path == null) return;
 
-    final tmpState = state.copyWithRemoveEntry(path);
-    state = tmpState.copyWithUpdateCurrentPageBuildFlag(true);
+    state = state
+        .copyWithRemoveEntry(path)
+        .copyWithUpdateCurrentPageBuildFlag(true)
+        .copyWith(shouldClearCache: false);
 
     // 結果待ちの対象ページならキャンセルを通知する
     if (resultAttaches.containsKey(pageId)) {
@@ -530,7 +542,9 @@ class InternalNavigationService extends Notifier<NavigationState>
     final tmpState = state.copyWith(
         stack: state.stack
             .replaceImmutable(target, target.copyWith(selectedIndex: index)));
-    state = tmpState.copyWithUpdateCurrentPageBuildFlag(true);
+    state = tmpState
+        .copyWithUpdateCurrentPageBuildFlag(true)
+        .copyWith(shouldClearCache: false);
   }
 
   // カレントページのisBuildフラグを変更
