@@ -1,2 +1,0 @@
-/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/android/app/.cxx/Debug/721xh6l4/armeabi-v7a/CMakeFiles/edit_cache.dir
-/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/example/android/app/.cxx/Debug/721xh6l4/armeabi-v7a/CMakeFiles/rebuild_cache.dir
