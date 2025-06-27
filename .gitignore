@@ -21,25 +21,26 @@ pubspec.lock
 Thumbs.db
 
 # Android specific
-android/.gradle/
-android/.idea/
-android/local.properties
-android/app/debug
-android/app/profile
-android/app/release
-android/gradle/
-android/gradlew
-android/gradlew.bat
+**/android/.gradle/
+**/android/.idea/
+**/android/local.properties
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+**/android/gradle/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/app/.cxx/
 
 # iOS specific
-ios/DerivedData/
-ios/Runner.xcworkspace/xcuserdata/
-ios/Podfile.lock
-ios/Pods/
-ios/.symlinks/
+**/ios/DerivedData/
+**/ios/Runner.xcworkspace/xcuserdata/
+**/ios/Podfile.lock
+**/ios/Pods/
+**/ios/.symlinks/
 
 # Web specific
-web/packages/
+**/web/packages/
 
 # Test related
 coverage/
@@ -72,6 +73,3 @@ test_driver/
 # Build outputs
 *.dSYM.zip
 *.dSYM
-
-# NDK
-android/app/.cxx/ 
