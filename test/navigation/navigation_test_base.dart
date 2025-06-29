@@ -51,6 +51,16 @@ class NavigationTestBase {
     mockApp.dispose();
   }
 
+  Future<MockViewModelBase> setUpHomePage(WidgetTester tester) async {
+    await tester.pumpWidget(CreateTestApp((builder) {
+      return builder.addNavigator((navBuilder) {
+        navBuilder.addPage<MockAViewModel>();
+      });
+    }));
+
+    return ViewModelStack.callVmStack.whereType<MockAViewModel>().last;
+  }
+
   Future<void> testPageLifecycle(WidgetTester tester) async {
     await tester.pump(Duration(milliseconds: 100));
     WidgetsBinding.instance

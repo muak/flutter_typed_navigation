@@ -7,6 +7,16 @@ import 'view_registry.dart';
 import 'navigation_entry.dart';
 
 abstract interface class NavigationService {
+
+  // 型指定したページに遷移する
+  Future<void> navigate<TViewModel>({dynamic param});
+  // 型指定したページに遷移し結果を待つ
+  Future<TResult?> navigateResult<TViewModel, TResult>({dynamic param});
+  // 型指定したページをモーダルで表示する
+  Future<void> navigateModal<TViewModel>({dynamic param});
+  // 型指定したページをモーダルで表示し結果を待つ
+  Future<TResult?> navigateModalResult<TViewModel, TResult>({dynamic param});
+
   // 前のページに戻る
   Future<void> goBack();
   // 前のページに戻り、結果を返す

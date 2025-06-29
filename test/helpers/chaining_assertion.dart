@@ -5,6 +5,10 @@ extension ChainingAssertion on dynamic {
     expect(this, expected, reason: reason);
   }
 
+  void shouldNotBe(dynamic expected, {String? reason}) {
+    expect(this, isNot(expected), reason: reason);
+  }
+
   void shouldBeNull({String? reason}) {
     expect(this, isNull, reason: reason);
   }

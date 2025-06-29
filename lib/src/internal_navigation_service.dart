@@ -71,6 +71,30 @@ class InternalNavigationService extends Notifier<NavigationState>
   }
 
   @override
+  Future<void> navigate<TViewModel>({dynamic param}) async {
+    await createRelativeBuilder().addPage<TViewModel>(param: param).navigate();
+  }
+
+  @override
+  Future<TResult?> navigateResult<TViewModel, TResult>({dynamic param}) async {
+    return await createRelativeBuilder().addPage<TViewModel>(param: param).navigateResult<TResult>();
+  }
+
+  @override
+  Future<void> navigateModal<TViewModel>({dynamic param}) async {
+    await createRelativeBuilder().addNavigator((navBuilder) {
+      navBuilder.addPage<TViewModel>(param: param);
+    }).navigate();
+  }
+
+  @override
+  Future<TResult?> navigateModalResult<TViewModel, TResult>({dynamic param}) async {
+    return await createRelativeBuilder().addNavigator((navBuilder) {
+      navBuilder.addPage<TViewModel>(param: param);
+    }).navigateResult<TResult>();
+  }
+
+  @override
   Future<void> goBack() async {
     final currentPageId = getCurrentPageId();
     if (currentPageId == null) return;
@@ -392,9 +416,10 @@ class InternalNavigationService extends Notifier<NavigationState>
 
       return getCurrentPageId() ??
           (throw Exception('getCurrentPageId() is null'));
-
-      // PopToRoot遷移の場合
-    } else if (segment.isRoot) {
+      
+    } 
+    // PopToRoot遷移の場合
+    else if (segment.isRoot) {
       final firstChild = state.findCurrentNavigatorFirstChildEntry();
       if (firstChild == null) throw Exception('firstChild is null');
       pageBuildCompleters[firstChild.pageId] = completer;
@@ -409,10 +434,10 @@ class InternalNavigationService extends Notifier<NavigationState>
         debugPrint('pageBuildCompleters[${firstChild.pageId}] timeout');
       });
 
-      return firstChild.pageId;
-
-      // Pop遷移の場合
-    } else {
+      return firstChild.pageId;      
+    } 
+    // Pop遷移の場合
+    else {
       final navigator = state.findCurrentNavigatorEntry() ??
           (throw Exception('currentNavigator is null'));
       if (navigator.children.length < 2) {

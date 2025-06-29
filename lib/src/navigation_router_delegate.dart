@@ -136,6 +136,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
       }
       final pageId = _navService.getCurrentPageId();
       if (_navService.pageBuildCompleters.containsKey(pageId)) {
+        debugPrint('pageBuildCompleters[$pageId] complete');
         _navService.pageBuildCompleters[pageId]?.complete(true);
         _navService.pageBuildCompleters.remove(pageId);
       }
