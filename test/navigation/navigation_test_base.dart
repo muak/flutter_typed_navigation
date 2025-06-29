@@ -19,19 +19,20 @@ class NavigationTestBase {
     navigationService = container.read(navigationServiceProvider);
     navigationService.register((regisgtry) {
       regisgtry
-          .register<MockAViewModel>(
-              mockAViewModelProvider.notifier, () => const MockAScreen())
-          .registerWithParameter<MockBViewModel>(
-              (p) => mockBViewModelProvider(p).notifier,
-              (p) => MockBScreen(parameter: p))
-          .register<MockCViewModel>(
-              mockCViewModelProvider.notifier, () => const MockCScreen())
-          .register<MockDViewModel>(
-              mockDViewModelProvider.notifier, () => const MockDScreen())
-          .register<MockEViewModel>(
-              mockEViewModelProvider.notifier, () => const MockEScreen())
-          .register<MockFViewModel>(
-              mockFViewModelProvider.notifier, () => const MockFScreen());
+        .register<MockAViewModel>(
+            mockAViewModelProvider.notifier, () => const MockAScreen())
+        .registerWithParameter<MockBViewModel>(
+            (p) => mockBViewModelProvider(p).notifier,
+            (p) => MockBScreen(parameter: p))
+        .register<MockCViewModel>(
+            mockCViewModelProvider.notifier, () => const MockCScreen())
+        .register<MockDViewModel>(
+            mockDViewModelProvider.notifier, () => const MockDScreen())
+        .register<MockEViewModel>(
+            mockEViewModelProvider.notifier, () => const MockEScreen())
+        .register<MockFViewModel>(
+            mockFViewModelProvider.notifier, () => const MockFScreen())
+        .registerTab<MockTabbedViewModel>(mockTabbedViewModelProvider.notifier, (config) =>  MockTabbedScreen(config: config));
     });
 
     startUp(navigationService.createAbsoluteBuilder()).setRoutes();
@@ -58,6 +59,10 @@ class NavigationTestBase {
     WidgetsBinding.instance
         .handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump(Duration(milliseconds: 100));
+  }
+
+  bool isVmExist<T>() {
+    return ViewModelStack.callVmStack.whereType<T>().isNotEmpty;
   }
 
   MockViewModelBase assertPageLifecycle<T>(List<String> actions) {

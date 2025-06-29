@@ -13,7 +13,7 @@ class RelativeNavigationBuilder {
         isAnimated: isAnimated,
         param: param,
         registrationKey: TViewModel.toString(),
-        isBuild: true // 相対ビルダーは常にビルド対象
+        isLazy: false // 相対ビルダーは常に即座にビルド（遅延しない）
         );
 
     _segments.add(pageSegment);
@@ -107,12 +107,14 @@ class RelativeNavigatorBuilder{
 
   RelativeNavigatorBuilder(this._navigatorSegment);
 
-  RelativeNavigatorBuilder addPage<TViewModel>({dynamic param, bool isBuild = true}) {
+  RelativeNavigatorBuilder addPage<TViewModel>(
+      {dynamic param, bool isLazy = false}) {
     
     final pageSegment = PageSegment(
       param: param, 
       registrationKey: TViewModel.toString(), 
-      isBuild: _navigatorSegment.isBuild && isBuild); // 親のisBuildがfalseの場合は子のisBuildもfalseになる
+        isLazy: _navigatorSegment.isLazy ||
+            isLazy); // 親がisLazy=trueの場合は子もisLazy=trueになる
     _navigatorSegment.children.add(pageSegment);
 
     return this;
@@ -128,11 +130,14 @@ class RelativeTabBuilder{
 
   RelativeTabBuilder(this._tabSegment);
 
-  RelativeTabBuilder addNavigator(void Function(RelativeNavigatorBuilder) builder, {bool isBuild = true}) {
+  RelativeTabBuilder addNavigator(
+      void Function(RelativeNavigatorBuilder) builder,
+      {bool isLazy = false}) {
 
     final segment = NavigatorSegment(
       isAnimated: false, 
-      isBuild: _tabSegment.isBuild && isBuild // 親のisBuildがfalseの場合は子のisBuildもfalseになる
+        isLazy:
+            _tabSegment.isLazy || isLazy // 親がisLazy=trueの場合は子もisLazy=trueになる
       );
     final navigatorBuilder = RelativeNavigatorBuilder(segment);
     builder(navigatorBuilder);

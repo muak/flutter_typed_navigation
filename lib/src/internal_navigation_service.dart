@@ -109,6 +109,11 @@ class InternalNavigationService extends Notifier<NavigationState>
   }
 
   @override
+  Future<void> changeTab(int index) async {
+    await createRelativeBuilder().addChangeTab(index).navigate();
+  }
+
+  @override
   Future<void> showBottomSheet<TViewModel>() async {
     final registration = _viewRegistry.getRegistration(TViewModel.toString()) ??
         (throw Exception('View not registered for $TViewModel'));
@@ -271,7 +276,7 @@ class InternalNavigationService extends Notifier<NavigationState>
 
   Future<String> _processPageNavigation(PageSegment segment) async {
     final pageEntry = PageEntry(
-      isBuild: true,
+      isLazy: false,
       registrationKey: segment.registrationKey,
       param: segment.param,
     );
@@ -289,17 +294,17 @@ class InternalNavigationService extends Notifier<NavigationState>
   }
 
   Future<String> _processNavigatorNavigation(NavigatorSegment segment) async {
-    // 最後の子ページは必ずbuildする
-    segment.children.last.isBuild = true;
+    // 最後の子ページは必ず即座にbuildする（遅延しない）
+    segment.children.last.isLazy = false;
     final navigatorEntry = NavigatorEntry(
       children: segment.children
           .map((e) => PageEntry(
-                isBuild: e.isBuild,
+                isLazy: e.isLazy,
                 registrationKey: e.registrationKey,
                 param: e.param,
               ))
           .toList(),
-      isBuild: true, // NavigatorEntry自身は必ずbuildする
+      isLazy: false, // NavigatorEntry自身は必ず即座にbuildする
       navigatorKey: GlobalKey<NavigatorState>(),
     );
     // 最後の子ページを次のCurrentPageとするために、そのページIDを取得する
@@ -320,23 +325,23 @@ class InternalNavigationService extends Notifier<NavigationState>
   }
 
   Future<String> _processTabNavigation(TabSegment segment) async {
-    // 選択されているタブとその末尾の子ページは必ずbuildする
+    // 選択されているタブとその末尾の子ページは必ず即座にbuildする（遅延しない）
     final selectedNavigator = segment.children[segment.selectedIndex];
-    selectedNavigator.isBuild = true;
+    selectedNavigator.isLazy = false;
     final lastChild = selectedNavigator.children.last;
-    lastChild.isBuild = true;
+    lastChild.isLazy = false;
 
     final tabEntry = TabEntry(
       registrationKey: segment.registrationKey,
       selectedIndex: segment.selectedIndex,
-      isBuild: true, // TabEntry自身は必ずbuildする
+      isLazy: false, // TabEntry自身は必ず即座にbuildする
       children: segment.children
           .map((navigatorSegment) => NavigatorEntry(
-                isBuild: navigatorSegment.isBuild,
+                isLazy: navigatorSegment.isLazy,
                 navigatorKey: GlobalKey<NavigatorState>(),
                 children: navigatorSegment.children
                     .map((pageSegment) => PageEntry(
-                          isBuild: pageSegment.isBuild,
+                          isLazy: pageSegment.isLazy,
                           registrationKey: pageSegment.registrationKey,
                           param: pageSegment.param,
                         ))
@@ -420,7 +425,7 @@ class InternalNavigationService extends Notifier<NavigationState>
 
       pop(currentPageId);
 
-      await completer.withTimeout(Duration(milliseconds: 1500), false,
+      await completer.withTimeout(Duration(milliseconds: 500), false,
           onTimeout: () {
         debugPrint('pageBuildCompleters[$currentPageId] timeout');
       });
@@ -433,7 +438,9 @@ class InternalNavigationService extends Notifier<NavigationState>
       ChangeTabSegment segment, String currentPageId) async {
     final tabEntry = state.stack.whereType<TabEntry>().lastOrNull ??
         (throw Exception('tabEntry is null'));
-    final targetPage = tabEntry.children.elementAtOrNull(segment.index) ??
+    final navigator = tabEntry.children.elementAtOrNull(segment.index) ??
+        (throw Exception('navigator is null'));
+    final targetPage = navigator.children.lastOrNull ??
         (throw Exception('targetPage is null'));
 
     final completer = Completer<bool>();
@@ -547,9 +554,9 @@ class InternalNavigationService extends Notifier<NavigationState>
         .copyWith(shouldClearCache: false);
   }
 
-  // カレントページのisBuildフラグを変更
-  void setCurrentPageBuildFlag(bool isBuild) {
-    state = state.copyWithUpdateCurrentPageBuildFlag(isBuild);
+  // カレントページのisLazyフラグを変更
+  void setCurrentPageLazyFlag(bool isLazy) {
+    state = state.copyWithUpdateCurrentPageBuildFlag(!isLazy);
   }
 
   NavigationPath? findEntryWithPath(String pageId) {

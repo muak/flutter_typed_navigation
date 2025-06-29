@@ -1,7 +1,7 @@
 class NavigationSegment{
-  bool isBuild;
+  bool isLazy;
   NavigationSegment({
-    this.isBuild = true,
+    this.isLazy = false,
   });
 }
 
@@ -18,7 +18,7 @@ class PageSegment extends NavigationSegment{
     this.isModal = false,
     this.isReplace = false,
     this.param,
-    super.isBuild,
+    super.isLazy,
   });
 }
 
@@ -31,7 +31,7 @@ class NavigatorSegment extends NavigationSegment{
   NavigatorSegment({
     this.isAnimated = true,
     this.isModal = false,
-    super.isBuild,
+    super.isLazy,
   });
 }
 
@@ -47,7 +47,7 @@ class TabSegment extends NavigationSegment{
     this.isModal = false,
     this.selectedIndex = 0,
     required this.registrationKey,
-    super.isBuild,
+    super.isLazy,
   });
 }
 

@@ -3,14 +3,14 @@ import 'package:uuid/uuid.dart';
 
 class NavigationEntry {
   final String pageId;
-  final bool isBuild;
+  final bool isLazy;
 
-  NavigationEntry({String? pageId, this.isBuild = true})
+  NavigationEntry({String? pageId, this.isLazy = false})
       : pageId = pageId ?? Uuid().v4();
 
-  NavigationEntry copyWith({String? pageId, bool? isBuild}) => NavigationEntry(
+  NavigationEntry copyWith({String? pageId, bool? isLazy}) => NavigationEntry(
         pageId: pageId ?? this.pageId,
-        isBuild: isBuild ?? this.isBuild,
+        isLazy: isLazy ?? this.isLazy,
       );
 
   NavigationEntry getCurrentEntry() => this;
@@ -24,7 +24,7 @@ class PageEntry extends NavigationEntry {
     required this.registrationKey,
     this.param,
     super.pageId,
-    super.isBuild,
+    super.isLazy,
   });
 
   @override
@@ -35,13 +35,13 @@ class PageEntry extends NavigationEntry {
     String? registrationKey,
     dynamic param,
     String? pageId,
-    bool? isBuild,
+    bool? isLazy,
   }) =>
       PageEntry(
         registrationKey: registrationKey ?? this.registrationKey,
         param: param ?? this.param,
         pageId: pageId ?? this.pageId,
-        isBuild: isBuild ?? this.isBuild,
+        isLazy: isLazy ?? this.isLazy,
       );
 }
 
@@ -52,7 +52,7 @@ class NavigatorEntry extends NavigationEntry {
   NavigatorEntry({
     this.children = const [],
     super.pageId,
-    super.isBuild,
+    super.isLazy,
     required this.navigatorKey,
   });
 
@@ -63,13 +63,13 @@ class NavigatorEntry extends NavigationEntry {
   NavigatorEntry copyWith({
     String? pageId,
     List<PageEntry>? children,
-    bool? isBuild,
+    bool? isLazy,
     GlobalKey<NavigatorState>? navigatorKey,
   }) =>
       NavigatorEntry(
         pageId: pageId ?? this.pageId,
         children: children ?? this.children,
-        isBuild: isBuild ?? this.isBuild,
+        isLazy: isLazy ?? this.isLazy,
         navigatorKey: navigatorKey ?? this.navigatorKey,
       );
 }
@@ -84,7 +84,7 @@ class TabEntry extends NavigationEntry {
     this.selectedIndex = 0,
     required this.registrationKey,
     super.pageId,
-    super.isBuild,
+    super.isLazy,
   });
 
   @override
@@ -96,13 +96,13 @@ class TabEntry extends NavigationEntry {
     int? selectedIndex,
     List<NavigatorEntry>? children,
     String? registrationKey,
-    bool? isBuild,
+    bool? isLazy,
   }) =>
       TabEntry(
         pageId: pageId ?? this.pageId,
         children: children ?? this.children,
         selectedIndex: selectedIndex ?? this.selectedIndex,
         registrationKey: registrationKey ?? this.registrationKey,
-        isBuild: isBuild ?? this.isBuild,
+        isLazy: isLazy ?? this.isLazy,
       );
 }

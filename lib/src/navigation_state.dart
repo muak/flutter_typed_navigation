@@ -154,7 +154,7 @@ class NavigationState {
     }
   }
 
-  // カレントページのisBuildフラグを変更
+  // カレントページのisLazyフラグを変更（内部的にはisBuildとして扱う）
   NavigationState copyWithUpdateCurrentPageBuildFlag(bool isBuild) {
     if (stack.isEmpty) return this;
 
@@ -163,19 +163,19 @@ class NavigationState {
     switch (lastEntry) {
       case PageEntry pageEntry:
         // 直接PageEntryの場合
-        final updatedEntry = pageEntry.copyWith(isBuild: isBuild);
+        final updatedEntry = pageEntry.copyWith(isLazy: !isBuild);
         final newStack = stack.replaceImmutable(lastEntry, updatedEntry);
         return copyWith(stack: newStack);
 
       case NavigatorEntry navigatorEntry:
-        // NavigatorEntry内の最後のPageEntryを更新し、NavigatorEntry自身のisBuildも変更
+        // NavigatorEntry内の最後のPageEntryを更新し、NavigatorEntry自身のisLazyも変更
         if (navigatorEntry.children.isNotEmpty) {
           final lastChild = navigatorEntry.children.last;
-          final updatedChild = lastChild.copyWith(isBuild: isBuild);
+          final updatedChild = lastChild.copyWith(isLazy: !isBuild);
           final newChildren =
               navigatorEntry.children.replaceImmutable(lastChild, updatedChild);
           final updatedNavigatorEntry =
-              navigatorEntry.copyWith(children: newChildren, isBuild: isBuild);
+              navigatorEntry.copyWith(children: newChildren, isLazy: !isBuild);
           final newStack =
               stack.replaceImmutable(lastEntry, updatedNavigatorEntry);
           return copyWith(stack: newStack);
@@ -183,19 +183,19 @@ class NavigationState {
         break;
 
       case TabEntry tabEntry:
-        // TabEntry内の選択されたNavigatorEntryの最後のPageEntryを更新し、TabEntry自身のisBuildも変更
+        // TabEntry内の選択されたNavigatorEntryの最後のPageEntryを更新し、TabEntry自身のisLazyも変更
         final selectedNavigator = tabEntry.children[tabEntry.selectedIndex];
         if (selectedNavigator.children.isNotEmpty) {
           final lastChild = selectedNavigator.children.last;
-          final updatedChild = lastChild.copyWith(isBuild: isBuild);
+          final updatedChild = lastChild.copyWith(isLazy: !isBuild);
           final newChildren = selectedNavigator.children
               .replaceImmutable(lastChild, updatedChild);
           final updatedNavigator = selectedNavigator.copyWith(
-              children: newChildren, isBuild: isBuild);
+              children: newChildren, isLazy: !isBuild);
           final newTabChildren = tabEntry.children
               .replaceImmutable(selectedNavigator, updatedNavigator);
           final updatedTabEntry =
-              tabEntry.copyWith(children: newTabChildren, isBuild: isBuild);
+              tabEntry.copyWith(children: newTabChildren, isLazy: !isBuild);
           final newStack = stack.replaceImmutable(lastEntry, updatedTabEntry);
           return copyWith(stack: newStack);
         }

@@ -13,8 +13,11 @@ abstract interface class NavigationService {
   Future<void> goBackResult<TResult>(TResult result);
   // モーダルを閉じる
   Future<void> closeModal();
-  // モーダルを閉じり、結果を返す
+  // モーダルを閉じ、結果を返す
   Future<void> closeModalResult<TResult>(TResult result);
+  // タブを切り替える
+  Future<void> changeTab(int index);
+
   // ボトムシートを閉じる
   void closeBottomSheet();
   // ボトムシートを閉じり、結果を返す

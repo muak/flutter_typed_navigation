@@ -81,12 +81,12 @@ class HomeViewModel extends _$HomeViewModel with ViewModelCore {
         navBuilder
             .addPage<HomeViewModel>()
             .addPage<HomeDetailViewModel>(param: HomeDetailParam('Hello'));
-      }, isBuild: false).addNavigator((navBuilder) {
+      }, isLazy: true).addNavigator((navBuilder) {
         navBuilder
             .addPage<SettingsViewModel>()
             .addPage<AccountSettingsViewModel>();
-      }, isBuild: false);
-    }, selectedIndex: 1, isBuild: false).setRoutes();
+      }, isLazy: true);
+    }, selectedIndex: 1, isLazy: true).setRoutes();
   }
 
   Future<void> navigateAlphaResult() async {
@@ -168,11 +168,11 @@ class HomeViewModel extends _$HomeViewModel with ViewModelCore {
             navBuilder
               .addPage<ModalTabAlphaViewModel>()
               .addPage<ModalTabAlphaNextViewModel>();
-          }, isBuild: false)
+      }, isLazy: true)
           .addNavigator((navBuilder) {
             navBuilder
               .addPage<ModalTabBetaViewModel>();
-          }, isBuild: false);
+      }, isLazy: true);
     }, selectedIndex: 0)
     .navigateResult<String>();
     debugPrint('ModalTab: result=$result');

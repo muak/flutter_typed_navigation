@@ -229,8 +229,8 @@ class AppRouterDelegate extends RouterDelegate<Empty>
 
       final page = stack[index];
 
-      // EmptyPageでかつビルド対象の場合はビルドしなおす
-      if (page is EmptyPage && entry.isBuild) {
+      // EmptyPageでかつ遅延対象でない場合はビルドしなおす
+      if (page is EmptyPage && !entry.isLazy) {
         switch (entry) {
           case NavigatorEntry navigatorEntry:
             final navigatorPage = _buildNavigatorPage(navigatorEntry);
@@ -251,7 +251,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
   }
 
   Page<dynamic> _buildTabPage(TabEntry entry) {
-    if (!entry.isBuild) {
+    if (entry.isLazy) {
       return EmptyPage(key: ValueKey(entry.pageId));
     }
 
@@ -291,7 +291,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
   }
 
   Page<dynamic> _buildNavigatorPage(NavigatorEntry entry) {
-    if (!entry.isBuild) {
+    if (entry.isLazy) {
       return EmptyPage(key: ValueKey(entry.pageId));
     }
     return NavigatorPage(
@@ -320,8 +320,8 @@ class AppRouterDelegate extends RouterDelegate<Empty>
 
       final page = stack[index];
 
-      // EmptyPageでかつビルド対象の場合はビルドしなおす
-      if (page is EmptyPage && child.isBuild) {
+      // EmptyPageでかつ遅延対象でない場合はビルドしなおす
+      if (page is EmptyPage && !child.isLazy) {
         final newPage = _buildContentPage(child);
         // ページを入れ替える
         stack[index] = newPage;
@@ -335,7 +335,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
   }
 
   Page<dynamic> _buildContentPage(PageEntry entry) {
-    if (!entry.isBuild) {
+    if (entry.isLazy) {
       return EmptyPage(key: ValueKey(entry.pageId));
     }
     final pageValue = _getPageValue(entry);
@@ -375,7 +375,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
           var index =
               tabs.indexWhere((x) => x.key.toStringValue() == child.pageId);
           if (index == -1) {
-            final newTab = child.isBuild
+            final newTab = !child.isLazy
                 ? _buildNavigator(child, isTab: true)
                 : SizedBox.shrink(key: ValueKey(child.pageId));
             tabs.add(newTab);
@@ -383,7 +383,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
           }
 
           final tab = tabs[index];
-          if (tab is SizedBox && child.isBuild) {
+          if (tab is SizedBox && !child.isLazy) {
             final replacedTab = _buildNavigator(child, isTab: true);
             tabs[index] = replacedTab;
             continue;
@@ -455,7 +455,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
   }
 
   ProviderListenable? _getViewModelProvider(PageEntry entry) {
-    if (!entry.isBuild) return null;
+    if (entry.isLazy) return null;
 
     if (_providerCache.containsKey(entry.pageId)) {
       return _providerCache[entry.pageId];
@@ -479,8 +479,8 @@ class AppRouterDelegate extends RouterDelegate<Empty>
   }
 
   PageValue _getPageValue(PageEntry entry) {
-    // ビルド対象外の場合は空のWidgetを返す
-    if (!entry.isBuild) return (entry: entry, view: const SizedBox.shrink());
+    // 遅延対象の場合は空のWidgetを返す
+    if (entry.isLazy) return (entry: entry, view: const SizedBox.shrink());
 
     if (entry.param != null) {
       final registration = _viewRegistry

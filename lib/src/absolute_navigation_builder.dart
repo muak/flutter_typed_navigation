@@ -10,29 +10,32 @@ class AbsoluteNavigationBuilder{
 
   AbsoluteNavigationBuilder(this._navigationService);
 
-  void setCurrentPageBuildFlag() {
+  void setCurrentPageLazyFlag() {
     final lastSegment = _segments.last;
     switch (lastSegment) {
       case PageSegment pageSegment:
-        pageSegment.isBuild = true;
+        pageSegment.isLazy = false;
         break;
       case NavigatorSegment navigatorSegment:
-        navigatorSegment.isBuild = true;      
+        navigatorSegment.isLazy = false;      
         final lastChild = navigatorSegment.children.last;
-        lastChild.isBuild = true;        
+        lastChild.isLazy = false;        
         break;
       case TabSegment tabSegment:
-        tabSegment.isBuild = true;
+        tabSegment.isLazy = false;
         final selectedNavigator = tabSegment.children[tabSegment.selectedIndex];
-        selectedNavigator.isBuild = true;
+        selectedNavigator.isLazy = false;
         final lastChild = selectedNavigator.children.last;
-        lastChild.isBuild = true;
+        lastChild.isLazy = false;
         break;
     }
   }
 
-  AbsoluteNavigationBuilder addNavigator(void Function(AbsoluteNavigatorBuilder) builder, {bool isBuild = true}) {
-    final navigatorSegment = NavigatorSegment(isAnimated: false, isBuild: isBuild);
+  AbsoluteNavigationBuilder addNavigator(
+      void Function(AbsoluteNavigatorBuilder) builder,
+      {bool isLazy = false}) {
+    final navigatorSegment =
+        NavigatorSegment(isAnimated: false, isLazy: isLazy);
 
     final navigatorBuilder = AbsoluteNavigatorBuilder(navigatorSegment);
     builder(navigatorBuilder);
@@ -42,8 +45,15 @@ class AbsoluteNavigationBuilder{
     return this;
   }  
 
-  AbsoluteNavigationBuilder addTabPage<TViewModel>(void Function(AbsoluteTabBuilder) builder, {int selectedIndex = 0, bool isBuild = true}) {
-    final tabSegment = TabSegment(registrationKey: TViewModel.toString(), isAnimated: false, selectedIndex: selectedIndex, isBuild: isBuild);
+  AbsoluteNavigationBuilder addTabPage<TViewModel>(
+      void Function(AbsoluteTabBuilder) builder,
+      {int selectedIndex = 0,
+      bool isLazy = false}) {
+    final tabSegment = TabSegment(
+        registrationKey: TViewModel.toString(),
+        isAnimated: false,
+        selectedIndex: selectedIndex,
+        isLazy: isLazy);
     final tabBuilder = AbsoluteTabBuilder(tabSegment);
     builder(tabBuilder);
 
@@ -57,8 +67,8 @@ class AbsoluteNavigationBuilder{
   }
 
   List<NavigationEntry> build() {
-    // カレントページのisBuildフラグをtrueに設定
-    setCurrentPageBuildFlag();
+    // カレントページのisLazyフラグをfalseに設定（即座にビルド）
+    setCurrentPageLazyFlag();
 
     final entries = _segments.map((segment) {
       return switch (segment) {
@@ -66,22 +76,22 @@ class AbsoluteNavigationBuilder{
           children: segment.children.map((pageSegment) => PageEntry(
             registrationKey: pageSegment.registrationKey,
             param: pageSegment.param,
-            isBuild: pageSegment.isBuild,
+                      isLazy: pageSegment.isLazy,
           )).toList(),
-          isBuild: segment.isBuild,
+            isLazy: segment.isLazy,
           navigatorKey: GlobalKey<NavigatorState>(),
         ),
         TabSegment() => TabEntry(
           registrationKey: segment.registrationKey,
           selectedIndex: segment.selectedIndex,
-          isBuild: segment.isBuild,
+            isLazy: segment.isLazy,
           children: segment.children.map((navigatorSegment) => NavigatorEntry(
             children: navigatorSegment.children.map((pageSegment) => PageEntry(
               registrationKey: pageSegment.registrationKey,
               param: pageSegment.param,
-              isBuild: pageSegment.isBuild,
+                                isLazy: pageSegment.isLazy,
             )).toList(),
-            isBuild: navigatorSegment.isBuild,
+                      isLazy: navigatorSegment.isLazy,
             navigatorKey: GlobalKey<NavigatorState>(),
           )).toList(),
         ),
@@ -100,12 +110,14 @@ class AbsoluteNavigatorBuilder{
 
   AbsoluteNavigatorBuilder(this._navigatorSegment);
 
-  AbsoluteNavigatorBuilder addPage<TViewModel>({dynamic param, bool isBuild = true}) {
+  AbsoluteNavigatorBuilder addPage<TViewModel>(
+      {dynamic param, bool isLazy = false}) {
     
     final pageSegment = PageSegment(
       param: param, 
       registrationKey: TViewModel.toString(), 
-      isBuild: _navigatorSegment.isBuild && isBuild); // 親のisBuildがfalseの場合は子のisBuildもfalseになる
+        isLazy: _navigatorSegment.isLazy ||
+            isLazy); // 親がisLazy=trueの場合は子もisLazy=trueになる
     _navigatorSegment.children.add(pageSegment);
 
     return this;
@@ -121,11 +133,14 @@ class AbsoluteTabBuilder{
 
   AbsoluteTabBuilder(this._tabSegment);
 
-  AbsoluteTabBuilder addNavigator(void Function(AbsoluteNavigatorBuilder) builder, {bool isBuild = true}) {
+  AbsoluteTabBuilder addNavigator(
+      void Function(AbsoluteNavigatorBuilder) builder,
+      {bool isLazy = false}) {
 
     final segment = NavigatorSegment(
       isAnimated: false, 
-      isBuild: _tabSegment.isBuild && isBuild // 親のisBuildがfalseの場合は子のisBuildもfalseになる
+        isLazy:
+            _tabSegment.isLazy || isLazy // 親がisLazy=trueの場合は子もisLazy=trueになる
       );
     final navigatorBuilder = AbsoluteNavigatorBuilder(segment);
     builder(navigatorBuilder);

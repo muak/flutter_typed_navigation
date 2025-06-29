@@ -36,31 +36,36 @@ void main() {
   });
   navigationService.createAbsoluteBuilder()
     // 全体遷移テスト用ルート
-    // .addTabPage<TabRootViewModel>((builder) {
-    //   builder
-    //   .addNavigator((navBuilder){
-    //     navBuilder.addPage<HomeViewModel>()
-    //               .addPage<HomeDetailViewModel>(param: HomeDetailParam('Hello'));
-    //   }, isBuild: false)
-    //   .addNavigator((navBuilder){
-    //     navBuilder.addPage<SettingsViewModel>()
-    //               .addPage<AccountSettingsViewModel>();
-    //   }, isBuild: false);
-    // }, selectedIndex: 1, isBuild: false)
-    // .addNavigator((navBuilder){
-    //   navBuilder.addPage<BetaViewModel>(isBuild: false);
-    // }, isBuild: false)
+    .addTabPage<TabRootViewModel>(
+      (builder) {
+        builder.addNavigator(
+          (navBuilder) {
+            navBuilder
+              .addPage<HomeViewModel>()
+              .addPage<HomeDetailViewModel>(param: HomeDetailParam('Hello'));
+          }, isLazy: true)
+          .addNavigator(
+          (navBuilder) {
+            navBuilder
+                .addPage<SettingsViewModel>()
+                .addPage<AccountSettingsViewModel>();
+          }, isLazy: true);
+      }, selectedIndex: 1, isLazy: true)
+    .addNavigator(
+      (navBuilder) {
+        navBuilder.addPage<BetaViewModel>(isLazy: true);
+      }, isLazy: true)
     // 相対遷移テスト用ルート
-    .addNavigator((routeBuilder){
-      routeBuilder
-        .addPage<AlphaParamViewModel>(param: AlphaParam('Hello'));
-    })
+    // .addNavigator((routeBuilder){
+    //   routeBuilder
+    //     .addPage<HomeViewModel>();
+    // })
     .setRoutes();
 
   runApp(
     UncontrolledProviderScope(
       container: container,
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
