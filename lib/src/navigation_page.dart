@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 
 class _ModalPageRoute<T> extends PageRoute<T> {
@@ -45,10 +46,13 @@ class _ModalPageRoute<T> extends PageRoute<T> {
     // SlideUp animation for modal appearance
     const begin = Offset(0.0, 1.0); // Start from bottom
     const end = Offset.zero; // End at center
-    const curve = Curves.easeInOut;
+    
+    // Use platform-specific curves for more natural animation
+    final curve = Platform.isIOS ? Curves.easeOut : Curves.easeInOut;
+    final reverseCurve = Platform.isIOS ? Curves.easeIn : Curves.easeInOut;
 
     final tween = Tween(begin: begin, end: end).chain(
-      CurveTween(curve: curve),
+      CurveTween(curve: animation.status == AnimationStatus.reverse ? reverseCurve : curve),
     );
 
     final offsetAnimation = animation.drive(tween);
