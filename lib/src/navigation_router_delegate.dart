@@ -196,7 +196,14 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
     // タブ本体ページを生成
     final tabPageValue = _getTabPageValue(entry, tabConfigState);
 
-    return TabPage(key: ValueKey(entry.pageId), child: tabPageValue.view);
+    // shouldClearCacheがtrueの場合はアニメーションを無効にする
+    final shouldClearCache = ref.read(navigationServiceStateProvider).shouldClearCache;
+    
+    return TabPage(
+      key: ValueKey(entry.pageId), 
+      child: tabPageValue.view,
+      isAnimated: !shouldClearCache,
+    );
   }
 
   Widget _buildNavigator(NavigatorEntry entry, {bool isTab = false}) {
@@ -230,9 +237,14 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
     if (entry.isLazy) {
       return EmptyPage(key: ValueKey(entry.pageId));
     }
+    
+    // shouldClearCacheがtrueの場合はアニメーションを無効にする
+    final shouldClearCache = ref.read(navigationServiceStateProvider).shouldClearCache;
+    
     return NavigatorPage(
       key: ValueKey(entry.pageId),
       child: _buildNavigator(entry),
+      isAnimated: !shouldClearCache,
     );
   }
 
