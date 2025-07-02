@@ -96,12 +96,28 @@ flutter run -d macos     # macOS
 # 静的解析
 flutter analyze
 
-# フォーマット
-dart format .
-
-# フォーマット確認（CI用）
-dart format --set-exit-if-changed .
+# ⚠️ 重要: dart formatは実行禁止
+# dart format .              # 実行しないこと
+# dart format --set-exit-if-changed .  # 実行しないこと
 ```
+
+### ⚠️ dart format 実行禁止
+**このプロジェクトでは dart format コマンドの実行を禁止します。**
+
+#### 理由
+- 意図しないフォーマット変更により、PRに大量の無関係な変更が混入する
+- 実際の機能変更のみをコミットに含めたいため
+- レビュー時に本質的な変更を見つけにくくなる
+
+#### 禁止対象
+- `dart format .` コマンドの直接実行
+- IDE/エディタの自動フォーマット機能の使用
+- 保存時の自動フォーマット
+
+#### コミット時の注意
+- `git diff` で変更内容を必ず確認
+- フォーマット変更が含まれている場合は、機能変更のみを選択的にコミット
+- `git add -p` を活用して部分的なステージングを行う
 
 ## アーキテクチャ
 
