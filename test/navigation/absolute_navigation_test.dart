@@ -28,6 +28,9 @@ void main() {
           .text('MockAStateInit')
           .shouldBe(findsOneWidget, reason: 'MockAStateInitが表示されていることを確認');
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+
       final vm = base.assertPageLifecycle<MockAViewModel>(
           ['build', 'onActiveFirst', 'onActive', 'onPaused', 'onResumed']);
       vm.isActive.shouldBe(true, reason: '1ページのみなので常にアクティブ');
@@ -46,6 +49,9 @@ void main() {
 
       find.text('MockBStateInit bParam').shouldBe(findsOneWidget,
           reason: 'Build後のStateの状態の反映とパラメータが渡されていることを確認');
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はBの1つ');
 
       final vm = base.assertPageLifecycle<MockBViewModel>(
           ['build', 'onActiveFirst', 'onActive', 'onPaused', 'onResumed']);
@@ -71,6 +77,9 @@ void main() {
           .text('MockBStateInit bParam', skipOffstage: false)
           .shouldBe(findsOneWidget, reason: 'MockBStateInitが表示されていることを確認');
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,Bの2つ');
+
       final vmA = base.assertPageLifecycle<MockAViewModel>(
           ['build', 'onPaused', 'onResumed']);
       vmA.isActive.shouldBe(false, reason: '下層なので非アクティブ');
@@ -84,6 +93,9 @@ void main() {
       // 戻る
       base.navigationService.goBack();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
 
       vmB.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
 
@@ -122,6 +134,9 @@ void main() {
           .text('MockBStateInit bParam', skipOffstage: false)
           .shouldBe(findsOneWidget, reason: 'MockBStateInitが表示されていることを確認');
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,Bの2つ（遅延ロードでも構造は同じ）');
+
       base
           .isVmExist<MockAViewModel>()
           .shouldBeFalse(reason: 'MockAViewModelが存在しないことを確認');
@@ -134,6 +149,9 @@ void main() {
       // 戻る
       base.navigationService.goBack();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
 
       vmB.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
 
@@ -174,6 +192,11 @@ void main() {
         .text('MockCStateInit', skipOffstage: false)
         .shouldBe(findsOneWidget, reason: 'MockCStateInitが表示されていることを確認');
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getTabEntry(0).children.length.shouldBe(2, reason: 'Tabは2つ');
+      base.getNavigatorEntryInTab(0, 0).children.length.shouldBe(2, reason: 'Tabの子要素はA,Bの2つ');
+      base.getNavigatorEntryInTab(0, 1).children.length.shouldBe(1, reason: 'Tabの子要素はCの1つ');
+
       final vmA = base.assertPageLifecycle<MockAViewModel>(
           ['build', 'onPaused', 'onResumed']);
       vmA.isActive.shouldBeFalse(reason: '下層なので非アクティブ');
@@ -193,6 +216,9 @@ void main() {
       base.navigationService.changeTab(0);
       await tester.pumpAndSettle(Duration(milliseconds: 100));
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getTabEntry(0).children.length.shouldBe(2, reason: 'Tabは2つ');
+
       base.assertPageLifecycle<MockBViewModel>(['onActiveFirst', 'onActive']);
       vmB.isActive.shouldBeTrue(reason: 'カレントページになったのでアクティブ');
       base.assertPageLifecycle<MockCViewModel>(['onInActive']);
@@ -205,6 +231,10 @@ void main() {
       // 戻る
       base.navigationService.goBack();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getTabEntry(0).children.length.shouldBe(2, reason: 'Tabは2つ');
+      base.getNavigatorEntryInTab(0, 0).children.length.shouldBe(1, reason: 'Tabの子要素はAの1つに戻った');
 
       vmB.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
 
@@ -248,6 +278,11 @@ void main() {
         .text('MockCStateInit', skipOffstage: false)
         .shouldBe(findsOneWidget, reason: 'MockCStateInitが表示されていることを確認');
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getTabEntry(0).children.length.shouldBe(2, reason: 'Tabは2つ');
+      base.getNavigatorEntryInTab(0, 0).children.length.shouldBe(2, reason: 'Tabの子要素はA,Bの2つ（遅延ロードでも構造は同じ）');
+      base.getNavigatorEntryInTab(0, 1).children.length.shouldBe(1, reason: 'Tabの子要素はCの1つ');
+
       base.isVmExist<MockAViewModel>().shouldBeFalse(reason: 'MockAViewModelが存在しないことを確認');
       base.isVmExist<MockBViewModel>().shouldBeFalse(reason: 'MockBViewModelが存在しないことを確認');
       
@@ -265,6 +300,9 @@ void main() {
       // タブを切り替える
       base.navigationService.changeTab(0);
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getTabEntry(0).children.length.shouldBe(2, reason: 'Tabは2つ');
 
       base.isVmExist<MockAViewModel>().shouldBeFalse(reason: 'MockAViewModelが存在しないことを確認');
       // 遅延ロードによるMockBのビルドが走る
@@ -284,6 +322,10 @@ void main() {
       // 戻る
       base.navigationService.goBack();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getTabEntry(0).children.length.shouldBe(2, reason: 'Tabは2つ');
+      base.getNavigatorEntryInTab(0, 0).children.length.shouldBe(1, reason: 'Tabの子要素はAの1つに戻った');
 
       vmB.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
 
@@ -320,6 +362,10 @@ void main() {
         .text('MockBStateInit bParam', skipOffstage: false)
         .shouldBe(findsOneWidget, reason: 'MockBStateInitが表示されていることを確認');
 
+      base.modalStack.length.shouldBe(2, reason: 'Modalスタックは2つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+      base.getNavigatorEntry(1).children.length.shouldBe(1, reason: 'Navigatorの子要素はBの1つ');
+
       final vmA = base.assertPageLifecycle<MockAViewModel>(
           ['build', 'onPaused', 'onResumed']);
       vmA.isActive.shouldBeFalse(reason: '下層なので非アクティブ');
@@ -333,6 +379,9 @@ void main() {
       // モーダルを閉じる
       base.navigationService.closeModal();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'モーダルが閉じられてModalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
 
       base.assertPageLifecycle<MockAViewModel>(['onActiveFirst', 'onActive']);
       vmA.isActive.shouldBeTrue(reason: 'カレントページになったのでアクティブ');
@@ -364,6 +413,9 @@ void main() {
 
       await tester.pumpAndSettle(Duration(milliseconds: 100));
 
+      base.modalStack.length.shouldBe(1, reason: '絶対遷移によりModalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はCの1つ');
+
       final vmA = base.assertPageLifecycle<MockAViewModel>(['build','destroy']);
       final vmB = base.assertPageLifecycle<MockBViewModel>(['build','onActiveFirst','onActive','destroy']);
       final vmC = base.assertPageLifecycle<MockCViewModel>(['build','onActiveFirst','onActive']);
@@ -374,6 +426,9 @@ void main() {
       vmC.isDestroyed.shouldBeFalse(reason: 'まだ破棄対象ではない');
       vmC.isActive.shouldBeTrue(reason: 'カレントページなのでアクティブ');
       
+      find
+        .text('MockCStateInit', skipOffstage: false)
+        .shouldBe(findsOneWidget, reason: 'MockCStateInitが表示されていることを確認');
     });
   });
 
