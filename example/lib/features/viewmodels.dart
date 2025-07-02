@@ -1,6 +1,5 @@
 export 'home/home_viewmodel.dart';
 export 'home/home_detail_viewmodel.dart';
-export 'initialize/initialize_viewmodel.dart';
 export 'settings/settings_viewmodel.dart';
 export 'home/sheet_viewmodel.dart';
 export 'home/sheet_result_viewmodel.dart';

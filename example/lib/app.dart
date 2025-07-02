@@ -10,7 +10,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     return MaterialApp.router(
-      title: 'KS App Core Example',
+      title: 'Navigation Example',
       routerDelegate: ref.read(navigationRouterDelegateProvider),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),

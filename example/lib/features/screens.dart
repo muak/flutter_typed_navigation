@@ -1,6 +1,5 @@
 export 'home/home_screen.dart';
 export 'home/home_detail_screen.dart';
-export 'initialize/initialize_screen.dart';
 export 'settings/settings_screen.dart';
 export 'settings/account_settings_screen.dart';
 export 'home/sheet_screen.dart';

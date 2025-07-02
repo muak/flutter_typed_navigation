@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_typed_navigation/src/navigation_page.dart';
 import 'extensions/list_extensions.dart';
 import 'extensions/page_extensions.dart';
 import 'internal_navigation_service.dart';
@@ -10,72 +11,6 @@ import 'view_registry.dart';
 
 typedef PageValue = ({PageEntry entry, Widget view});
 typedef TabPageValue = ({TabEntry entry, Widget view});
-
-class Empty {}
-
-class EmptyPage extends MaterialPage {
-  const EmptyPage({super.key}) : super(child: const SizedBox.shrink());
-
-  @override
-  bool canUpdate(Page other) {
-    // RuntimeTypeが異なっても同一扱いとする
-    return other.key == key;
-  }
-}
-
-class ContentPage extends MaterialPage {
-  const ContentPage({required super.child, super.key});
-
-  @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => child,
-    );
-  }
-
-  @override
-  bool canUpdate(Page other) {
-    // RuntimeTypeが異なっても同一扱いとする
-    return other.key == key;
-  }
-}
-
-class NavigatorPage extends MaterialPage {
-  const NavigatorPage({required super.child, super.key});
-
-  @override
-  bool canUpdate(Page other) {
-    // RuntimeTypeが異なっても同一扱いとする
-    return other.key == key;
-  }
-
-  @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => child,
-    );
-  }
-}
-
-class TabPage extends MaterialPage {
-  const TabPage({required super.child, super.key});
-
-  @override
-  bool canUpdate(Page other) {
-    // RuntimeTypeが異なっても同一扱いとする
-    return other.key == key;
-  }
-
-  @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => child,
-    );
-  }
-}
 
 class NavigationRouterDelegate extends RouterDelegate<Empty>
     with
@@ -506,6 +441,8 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
     return (entry: entry, view: view);
   }
 }
+
+class Empty {}
 
 final navigationRouterDelegateProvider = Provider<NavigationRouterDelegate>((ref) {
   return NavigationRouterDelegate(ref);

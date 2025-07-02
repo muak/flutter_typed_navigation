@@ -10,7 +10,6 @@ void main() {
   final navigationService = container.read(navigationServiceProvider);
   navigationService.register((regisgtry) {
     regisgtry
-    .register<InitializeViewModel>(initializeViewModelProvider.notifier, () => const InitializeScreen())
     .register<HomeViewModel>(homeViewModelProvider.notifier, () => const HomeScreen())    
     .registerWithParameter<HomeDetailViewModel>((p)=>homeDetailViewModelProvider(p).notifier, (p) => HomeDetailScreen(p))
     .register<SettingsViewModel>(settingsViewModelProvider.notifier, () => const SettingsScreen())
