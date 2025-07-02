@@ -21,10 +21,16 @@ void main(){
     testWidgets('Forward Backward Navigation', (WidgetTester tester) async {
       final vmA = await base.setUpHomePage(tester);
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+
       // MockBに遷移する
       base.navigationService.navigate<MockBViewModel>(param: MockBParameter('bParam'));
 
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,Bの2つ');
 
       vmA.isActive.shouldBeFalse(reason: '非アクティブになった');
       vmA.isDestroyed.shouldBeFalse(reason: 'まだ破棄対象ではない');
@@ -39,6 +45,9 @@ void main(){
       base.navigationService.goBack();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
+
       vmA.isActive.shouldBeTrue(reason: 'カレントページになったのでアクティブ');
       vmA.isDestroyed.shouldBeFalse(reason: 'まだ破棄対象ではない');
 
@@ -50,9 +59,16 @@ void main(){
     testWidgets('Forward Backward Modal Navigation', (WidgetTester tester) async {
       final vmA = await base.setUpHomePage(tester);
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+
       // MockBに遷移する
       base.navigationService.navigateModal<MockBViewModel>(param: MockBParameter('bParam'));
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(2, reason: 'Modalスタックは2つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+      base.getNavigatorEntry(1).children.length.shouldBe(1, reason: 'Navigatorの子要素はBの1つ');
 
       vmA.isActive.shouldBeFalse(reason: '非アクティブになった');
       vmA.isDestroyed.shouldBeFalse(reason: 'まだ破棄対象ではない');
@@ -66,6 +82,9 @@ void main(){
       // モーダルを閉じる
       base.navigationService.closeModal();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+      
+      base.modalStack.length.shouldBe(1, reason: 'モーダルが閉じられてModalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
       
       vmA.isActive.shouldBeTrue(reason: 'カレントページになったのでアクティブ');
       vmA.isDestroyed.shouldBeFalse(reason: 'まだ破棄対象ではない');
@@ -86,12 +105,18 @@ void main(){
 
       await tester.pumpAndSettle(Duration(milliseconds: 100));
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(3, reason: 'Navigatorの子要素はA,B,Cの3つ');
+
       final vmB = base.assertPageLifecycle<MockBViewModel>(['build','onActiveFirst','onActive','onInActive']);
       final vmC = base.assertPageLifecycle<MockCViewModel>(['build','onActiveFirst','onActive']);
 
       // ルートに戻る
       base.navigationService.goBackToRoot();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
 
       vmB.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
       vmC.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
@@ -105,13 +130,23 @@ void main(){
     testWidgets('Result Navigation', (WidgetTester tester) async {
       final vmA = await base.setUpHomePage(tester);
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+
       final completer = Completer<String>();
       base.navigationService.navigateResult<MockBViewModel, String>(param: MockBParameter('bParam')).then((result) {
         completer.complete(result);
       });
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+      
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,Bの2つ');
+      
       base.navigationService.goBackResult("OK");   
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
 
       final result = await completer.future;
       result.shouldBe("OK", reason: 'goBackResultの値が取得できた');
@@ -128,13 +163,24 @@ void main(){
     testWidgets('Modal Result Navigation', (WidgetTester tester) async {
       final vmA = await base.setUpHomePage(tester);
 
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+
       final completer = Completer<String>();
       base.navigationService.navigateModalResult<MockBViewModel, String>(param: MockBParameter('bParam')).then((result) {
         completer.complete(result);
       });
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+      
+      base.modalStack.length.shouldBe(2, reason: 'Modalスタックは2つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
+      base.getNavigatorEntry(1).children.length.shouldBe(1, reason: 'Navigatorの子要素はBの1つ');
+      
       base.navigationService.closeModalResult("OK");
       await tester.pumpAndSettle(Duration(milliseconds: 100));
+
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つ');
 
       final result = await completer.future;
       result.shouldBe("OK", reason: 'closeModalResultの値が取得できた');
@@ -248,6 +294,8 @@ void main(){
       await tester.pumpAndSettle(Duration(milliseconds: 100));
 
       base.modalStack.length.shouldBe(2,reason: 'モーダルが1つ閉じたのでModalスタックは2つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,Dの2つ');
+      base.getNavigatorEntry(1).children.length.shouldBe(2, reason: 'Navigatorの子要素はE,Fの2つ');
 
       vmG.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
       vmH.isDestroyed.shouldBeTrue(reason: '破棄対象になった');
