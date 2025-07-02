@@ -103,6 +103,11 @@ class InternalNavigationService extends Notifier<NavigationState>
   }
 
   @override
+  Future<void> goBackToRoot() async {
+    await createRelativeBuilder().addBackToRoot().navigate();
+  }
+
+  @override
   Future<void> goBackResult<TResult>(TResult result) async {
     final currentPageId = getCurrentPageId();
     if (currentPageId == null) return;
@@ -211,6 +216,9 @@ class InternalNavigationService extends Notifier<NavigationState>
 
       for (final segment in segments) {
         switch (segment) {
+          case ActionSegment():
+            await segment.action();
+            break;
           case BackSegment():
             if (canBack) {
               currentPageId =

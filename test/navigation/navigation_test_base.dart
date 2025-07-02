@@ -10,12 +10,13 @@ import '../mocks/mocks.dart';
 class NavigationTestBase {
   late MockApp mockApp;
   late NavigationService navigationService;
+  late ProviderContainer container;
 
   Widget CreateTestApp(
       AbsoluteNavigationBuilder Function(AbsoluteNavigationBuilder builder)
           startUp) {
     // 毎回新しいコンテナを作成
-    final container = ProviderContainer();
+    container = ProviderContainer();
     navigationService = container.read(navigationServiceProvider);
     navigationService.register((regisgtry) {
       regisgtry
@@ -32,6 +33,14 @@ class NavigationTestBase {
             mockEViewModelProvider.notifier, () => const MockEScreen())
         .register<MockFViewModel>(
             mockFViewModelProvider.notifier, () => const MockFScreen())
+        .register<MockGViewModel>(
+            mockGViewModelProvider.notifier, () => const MockGScreen())
+        .register<MockHViewModel>(
+            mockHViewModelProvider.notifier, () => const MockHScreen())
+        .register<MockIViewModel>(
+            mockIViewModelProvider.notifier, () => const MockIScreen())
+        .register<MockJViewModel>(
+            mockJViewModelProvider.notifier, () => const MockJScreen())
         .registerTab<MockTabbedViewModel>(mockTabbedViewModelProvider.notifier, (config) =>  MockTabbedScreen(config: config));
     });
 
@@ -41,6 +50,19 @@ class NavigationTestBase {
       container: container,
       child: mockApp,
     );
+  }
+
+  List<NavigationEntry> get modalStack => container.read(navigationServiceStateProvider).stack;
+
+  NavigatorEntry getNavigatorEntry(int modalIndex){
+    return modalStack[modalIndex] as NavigatorEntry;
+  }
+
+  TabEntry getTabEntry(int modalIndex){
+    return modalStack[modalIndex] as TabEntry;
+  }
+  NavigatorEntry getNavigatorEntryInTab(int modalIndex, int tabIndex){
+    return getTabEntry(modalIndex).children[tabIndex];
   }
 
   void setUpTest() {

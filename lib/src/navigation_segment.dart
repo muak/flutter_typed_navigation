@@ -76,3 +76,11 @@ class DelaySegment extends NavigationSegment{
     required this.milliSecondsDelay,
   });
 }
+
+class ActionSegment extends NavigationSegment{
+  final Future<void> Function() action;
+
+  ActionSegment({
+    required this.action,
+  });
+}

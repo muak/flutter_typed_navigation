@@ -5,29 +5,28 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'mock_viewmodel_base.dart';
-
-part 'mock_e_viewmodel.g.dart';
-part 'mock_e_viewmodel.freezed.dart';
+part 'mock_j_viewmodel.g.dart';
+part 'mock_j_viewmodel.freezed.dart';
 
 @freezed
-abstract class MockEState with _$MockEState {
-  const factory MockEState({
+abstract class MockJState with _$MockJState {
+  const factory MockJState({
     @Default('') String value,
-  }) = _MockEState;
+  }) = _MockJState;
 }
 
 @riverpod
-class MockEViewModel extends _$MockEViewModel
+class MockJViewModel extends _$MockJViewModel
     with ViewModelCore
     implements MockViewModelBase {
   @override
-  MockEState build() {
+  MockJState build() {
     ViewModelStack.callVmStack.add(this);
     ref.onDispose(() {
       destroy();
     });
     onBuild();
-    return MockEState(value: 'MockEStateInit');
+    return MockJState(value: 'MockJStateInit');
   }
 
   @override
@@ -80,5 +79,4 @@ class MockEViewModel extends _$MockEViewModel
     print('${runtimeType} onResumed');
   }
 
-
-}
+} 

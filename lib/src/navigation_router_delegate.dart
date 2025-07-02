@@ -77,12 +77,12 @@ class TabPage extends MaterialPage {
   }
 }
 
-class AppRouterDelegate extends RouterDelegate<Empty>
+class NavigationRouterDelegate extends RouterDelegate<Empty>
     with
         ChangeNotifier,
         PopNavigatorRouterDelegateMixin,
         WidgetsBindingObserver {
-  final WidgetRef ref;
+  final Ref ref;
   @override
   late final GlobalKey<NavigatorState> navigatorKey;
   final Map<String, ProviderListenable> _providerCache = {};
@@ -92,7 +92,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
   final Map<String, List<Widget>> _tabsCache = {};
   static const String _rootPageId = '0';
 
-  AppRouterDelegate(this.ref) {
+  NavigationRouterDelegate(this.ref) {
     _navService = ref.read(internalNavigationServiceProvider);
     navigatorKey = _navService.rootNavigatorKey;
     _viewRegistry = ref.read(viewRegistryProvider);
@@ -506,3 +506,7 @@ class AppRouterDelegate extends RouterDelegate<Empty>
     return (entry: entry, view: view);
   }
 }
+
+final navigationRouterDelegateProvider = Provider<NavigationRouterDelegate>((ref) {
+  return NavigationRouterDelegate(ref);
+});

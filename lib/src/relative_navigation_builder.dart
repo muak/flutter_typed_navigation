@@ -77,6 +77,13 @@ class RelativeNavigationBuilder {
     return this;
   }
 
+  RelativeNavigationBuilder addAction(Future<void> Function() action) {
+    final actionSegment = ActionSegment(action: action);
+    _segments.add(actionSegment);
+
+    return this;
+  }
+
   Future<void> navigate() {
     return _navigationService.navigateInternal(_segments);
   }

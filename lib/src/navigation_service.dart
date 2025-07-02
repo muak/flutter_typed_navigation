@@ -21,6 +21,8 @@ abstract interface class NavigationService {
   Future<void> goBack();
   // 前のページに戻り、結果を返す
   Future<void> goBackResult<TResult>(TResult result);
+  // Navigatorのルートに戻る
+  Future<void> goBackToRoot();
   // モーダルを閉じる
   Future<void> closeModal();
   // モーダルを閉じ、結果を返す

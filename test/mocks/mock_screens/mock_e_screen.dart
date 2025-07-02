@@ -7,7 +7,10 @@ class MockEScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(mockEViewModelProvider);
     final viewModel = ref.read(mockEViewModelProvider.notifier);
-    return SizedBox.shrink();
+    return Text(
+      state.value,
+    );
   }
 }

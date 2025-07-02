@@ -5,11 +5,11 @@ import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';
 // ignore: must_be_immutable
 class MockApp extends ConsumerWidget {
   MockApp({super.key});
-  late AppRouterDelegate routerDelegate;
+  late NavigationRouterDelegate routerDelegate;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    routerDelegate = AppRouterDelegate(ref);
+    routerDelegate = ref.read(navigationRouterDelegateProvider);
 
     return MaterialApp.router(
       title: 'Mock App',
