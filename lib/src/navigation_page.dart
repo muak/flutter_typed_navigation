@@ -44,21 +44,31 @@ class _ModalPageRoute<T> extends PageRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    // 開始アニメーションが無効化されている場合
-    if (disableStartAnimation) {
-      // 即座に完成状態で表示（開始アニメーションなし）
-      // ただし、終了アニメーションは機能する
-      return SlideTransition(
-        position: AlwaysStoppedAnimation(Offset.zero),
-        child: child,
-      );
-    }
-
     // SlideUp animation for modal appearance
     const begin = Offset(0.0, 1.0); // Start from bottom
     const end = Offset.zero; // End at center
     const curve = Curves.easeInOut;
 
+    // 開始アニメーションが無効化されている場合
+    if (disableStartAnimation) {
+      // 開始時は即座に完成状態、終了時は通常のアニメーション
+      final effectiveAnimation = animation.status == AnimationStatus.reverse 
+          ? animation  // 終了アニメーション時は通常のアニメーションを使用
+          : const AlwaysStoppedAnimation(1.0);  // 開始時は完了状態で固定
+
+      final tween = Tween(begin: begin, end: end).chain(
+        CurveTween(curve: curve),
+      );
+
+      final offsetAnimation = effectiveAnimation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    }
+
+    // 通常のアニメーション
     final tween = Tween(begin: begin, end: end).chain(
       CurveTween(curve: curve),
     );
