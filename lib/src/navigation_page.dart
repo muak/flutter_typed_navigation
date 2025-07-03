@@ -89,7 +89,9 @@ class ContentPage extends MaterialPage {
 }
 
 class NavigatorPage extends MaterialPage {
-  const NavigatorPage({required super.child, super.key});
+  final bool isAnimated;
+  
+  const NavigatorPage({required super.child, super.key, this.isAnimated = true});
 
   @override
   bool canUpdate(Page other) {
@@ -99,15 +101,24 @@ class NavigatorPage extends MaterialPage {
 
   @override
   Route createRoute(BuildContext context) {
-    return _ModalPageRoute(
-      settings: this,
-      builder: (context) => child,
-    );
+    if (isAnimated) {
+      return _ModalPageRoute(
+        settings: this,
+        builder: (context) => child,
+      );
+    } else {
+      return MaterialPageRoute(
+        settings: this,
+        builder: (context) => child,
+      );
+    }
   }
 }
 
 class TabPage extends MaterialPage {
-  const TabPage({required super.child, super.key});
+  final bool isAnimated;
+  
+  const TabPage({required super.child, super.key, this.isAnimated = true});
 
   @override
   bool canUpdate(Page other) {
@@ -117,9 +128,16 @@ class TabPage extends MaterialPage {
 
   @override
   Route createRoute(BuildContext context) {
-    return _ModalPageRoute(
-      settings: this,
-      builder: (context) => child,
-    );
+    if (isAnimated) {
+      return _ModalPageRoute(
+        settings: this,
+        builder: (context) => child,
+      );
+    } else {
+      return MaterialPageRoute(
+        settings: this,
+        builder: (context) => child,
+      );
+    }
   }
 }
