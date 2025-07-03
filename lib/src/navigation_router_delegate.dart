@@ -196,13 +196,13 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
     // タブ本体ページを生成
     final tabPageValue = _getTabPageValue(entry, tabConfigState);
 
-    // shouldClearCacheがtrueの場合はアニメーションを無効にする
+    // shouldClearCacheがtrueの場合は開始アニメーションを無効にする
     final shouldClearCache = ref.read(navigationServiceStateProvider).shouldClearCache;
     
     return TabPage(
       key: ValueKey(entry.pageId), 
       child: tabPageValue.view,
-      isAnimated: !shouldClearCache,
+      disableStartAnimation: shouldClearCache,
     );
   }
 
@@ -238,13 +238,13 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
       return EmptyPage(key: ValueKey(entry.pageId));
     }
     
-    // shouldClearCacheがtrueの場合はアニメーションを無効にする
+    // shouldClearCacheがtrueの場合は開始アニメーションを無効にする
     final shouldClearCache = ref.read(navigationServiceStateProvider).shouldClearCache;
     
     return NavigatorPage(
       key: ValueKey(entry.pageId),
       child: _buildNavigator(entry),
-      isAnimated: !shouldClearCache,
+      disableStartAnimation: shouldClearCache,
     );
   }
 

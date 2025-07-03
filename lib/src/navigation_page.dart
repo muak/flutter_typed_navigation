@@ -4,9 +4,11 @@ class _ModalPageRoute<T> extends PageRoute<T> {
   _ModalPageRoute({
     required this.builder,
     required RouteSettings settings,
+    this.disableStartAnimation = false,
   }) : super(settings: settings);
 
   final WidgetBuilder builder;
+  final bool disableStartAnimation;
 
   @override
   bool get opaque => false;
@@ -42,6 +44,16 @@ class _ModalPageRoute<T> extends PageRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
+    // 開始アニメーションが無効化されている場合
+    if (disableStartAnimation) {
+      // 即座に完成状態で表示（開始アニメーションなし）
+      // ただし、終了アニメーションは機能する
+      return SlideTransition(
+        position: AlwaysStoppedAnimation(Offset.zero),
+        child: child,
+      );
+    }
+
     // SlideUp animation for modal appearance
     const begin = Offset(0.0, 1.0); // Start from bottom
     const end = Offset.zero; // End at center
@@ -89,9 +101,9 @@ class ContentPage extends MaterialPage {
 }
 
 class NavigatorPage extends MaterialPage {
-  final bool isAnimated;
+  final bool disableStartAnimation;
   
-  const NavigatorPage({required super.child, super.key, this.isAnimated = true});
+  const NavigatorPage({required super.child, super.key, this.disableStartAnimation = false});
 
   @override
   bool canUpdate(Page other) {
@@ -101,24 +113,18 @@ class NavigatorPage extends MaterialPage {
 
   @override
   Route createRoute(BuildContext context) {
-    if (isAnimated) {
-      return _ModalPageRoute(
-        settings: this,
-        builder: (context) => child,
-      );
-    } else {
-      return MaterialPageRoute(
-        settings: this,
-        builder: (context) => child,
-      );
-    }
+    return _ModalPageRoute(
+      settings: this,
+      builder: (context) => child,
+      disableStartAnimation: disableStartAnimation,
+    );
   }
 }
 
 class TabPage extends MaterialPage {
-  final bool isAnimated;
+  final bool disableStartAnimation;
   
-  const TabPage({required super.child, super.key, this.isAnimated = true});
+  const TabPage({required super.child, super.key, this.disableStartAnimation = false});
 
   @override
   bool canUpdate(Page other) {
@@ -128,16 +134,10 @@ class TabPage extends MaterialPage {
 
   @override
   Route createRoute(BuildContext context) {
-    if (isAnimated) {
-      return _ModalPageRoute(
-        settings: this,
-        builder: (context) => child,
-      );
-    } else {
-      return MaterialPageRoute(
-        settings: this,
-        builder: (context) => child,
-      );
-    }
+    return _ModalPageRoute(
+      settings: this,
+      builder: (context) => child,
+      disableStartAnimation: disableStartAnimation,
+    );
   }
 }
