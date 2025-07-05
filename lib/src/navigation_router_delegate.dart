@@ -29,7 +29,7 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
     _navService = ref.read(internalNavigationServiceProvider);
     navigatorKey = _navService.rootNavigatorKey;
     _viewRegistry = ref.read(viewRegistryProvider);
-    SystemNavigator.setFrameworkHandlesBack(true);
+    
     WidgetsBinding.instance.addObserver(this);
 
     // Riverpodの状態変更時に通知(Stackだけを監視)
