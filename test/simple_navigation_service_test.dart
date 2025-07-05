@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../lib/flutter_typed_navigation.dart';
+import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';
 
 /// NavigationServiceの基本動作確認テスト
 /// Widget Testの前段階として実際のNavigationServiceが動作するかテスト
