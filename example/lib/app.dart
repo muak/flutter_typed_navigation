@@ -9,9 +9,9 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    return MaterialApp.router(
-      title: 'Navigation Example',
-      routerDelegate: ref.read(navigationRouterDelegateProvider),
+    return NavigationApp(
+      ref: ref,
+      title: 'Navigation Example',      
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
