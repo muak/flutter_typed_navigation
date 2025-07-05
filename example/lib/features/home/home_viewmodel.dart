@@ -26,7 +26,7 @@ abstract class HomeState with _$HomeState {
 // Flutter(Riverpod)ではNotifierを継承し、状態はbuild()で初期化する。
 @riverpod
 class HomeViewModel extends _$HomeViewModel with ViewModelCore {
-  // final _ksAppCorePlugin = KsAppCore(); // Removed ks_app_core dependency
+
   late final NavigationService _navigationService;
   @override
   HomeState build() {
@@ -61,10 +61,12 @@ class HomeViewModel extends _$HomeViewModel with ViewModelCore {
     debugPrint('HomeViewModel onResumed');
   }
 
+  
+
   Future<void> loadPlatformVersion() async {
     state = state.copyWith(isLoading: true, error: '');
     try {
-      final version = 'Flutter Example App'; // Removed ks_app_core dependency
+      final version = 'Flutter Example App'; 
       state = state.copyWith(platformVersion: version, isLoading: false);
     } on PlatformException {
       state = state.copyWith(
@@ -176,5 +178,19 @@ class HomeViewModel extends _$HomeViewModel with ViewModelCore {
     }, selectedIndex: 0)
     .navigateResult<String>();
     debugPrint('ModalTab: result=$result');
+  }
+
+  /// アプリを最小化（バックグラウンドに移動）します
+  Future<void> minimizeApp() async {
+    try {
+      final result = await PlatformService.minimizeApp();
+      if (result) {
+        debugPrint('アプリが正常に最小化されました');
+      } else {
+        debugPrint('アプリの最小化に失敗しました');
+      }
+    } catch (e) {
+      debugPrint('最小化でエラーが発生しました: $e');
+    }
   }
 }

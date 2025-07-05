@@ -10,7 +10,12 @@ class BetaScreen extends ConsumerWidget {
     debugPrint('BetaScreen build');
     final state = ref.watch(betaViewModelProvider);
     final viewModel = ref.read(betaViewModelProvider.notifier);
-    return Scaffold(
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        debugPrint('BetaScreen onPopInvokedWithResult: didPop=$didPop, result=$result');
+      },
+      child: Scaffold(
       appBar: AppBar(title: const Text('BetaScreen')),
       body: Center(
         child: Column(
@@ -31,6 +36,7 @@ class BetaScreen extends ConsumerWidget {
               child: const Text('閉じる'),
             ),
           ],
+          ),
         ),
       ),
     );

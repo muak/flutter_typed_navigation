@@ -84,6 +84,11 @@ class HomeScreen extends ConsumerWidget {
                           child: const Text('シート表示（パラメータ+戻り値）'),
                         ),
                         const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: viewModel.minimizeApp,
+                          child: const Text('アプリを最小化'),
+                        ),
+                        const SizedBox(height: 16),
                       ],
                     ),
         ),

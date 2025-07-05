@@ -538,7 +538,14 @@ class InternalNavigationService extends Notifier<NavigationState>
 
   void systemPop(String pageId) {
     final path = findEntryWithPath(pageId);
+    // ページが見つからない場合は何もしない
     if (path == null) return;
+
+    // 子ページが1つの場合は何もしない
+    final firstChild = state.findCurrentNavigatorFirstChildEntry();
+    if(firstChild == null || firstChild.pageId == pageId){
+      return;
+    }
 
     state = state
         .copyWithRemoveEntry(path)
@@ -634,6 +641,14 @@ class InternalNavigationService extends Notifier<NavigationState>
         break;
     }
     return null;
+  }
+
+  NavigatorEntry? getCurrentNavigatorEntry() {
+    return state.findCurrentNavigatorEntry();
+  }
+
+  List<NavigationEntry> getModalStack() {
+    return state.stack;
   }
 }
 

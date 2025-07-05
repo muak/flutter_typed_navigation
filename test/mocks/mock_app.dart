@@ -11,9 +11,9 @@ class MockApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     routerDelegate = ref.read(navigationRouterDelegateProvider);
 
-    return MaterialApp.router(
-      title: 'Mock App',
-      routerDelegate: routerDelegate,
+    return NavigationApp(
+      ref: ref,
+      title: 'Mock App',      
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,

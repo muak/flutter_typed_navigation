@@ -14,6 +14,8 @@ class NavigationState {
 
   const NavigationState({this.stack = const [], this.shouldClearCache = false});
 
+  
+
   NavigatorEntry? findNavigatorEntry(String pageId) {
     for (final entry in stack) {
       if (entry is NavigatorEntry && entry.pageId == pageId) {

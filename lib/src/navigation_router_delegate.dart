@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';
 import 'package:flutter_typed_navigation/src/navigation_page.dart';
 import 'extensions/list_extensions.dart';
 import 'extensions/page_extensions.dart';
 import 'internal_navigation_service.dart';
-import 'viewmodel_core.dart';
-import 'navigation_entry.dart';
-import 'tab_base_widget.dart';
-import 'view_registry.dart';
 
 typedef PageValue = ({PageEntry entry, Widget view});
 typedef TabPageValue = ({TabEntry entry, Widget view});
@@ -15,10 +13,10 @@ typedef TabPageValue = ({TabEntry entry, Widget view});
 class NavigationRouterDelegate extends RouterDelegate<Empty>
     with
         ChangeNotifier,
-        PopNavigatorRouterDelegateMixin,
+        // PopNavigatorRouterDelegateMixin,
         WidgetsBindingObserver {
   final Ref ref;
-  @override
+  // @override
   late final GlobalKey<NavigatorState> navigatorKey;
   final Map<String, ProviderListenable> _providerCache = {};
   late InternalNavigationService _navService;
@@ -31,7 +29,7 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
     _navService = ref.read(internalNavigationServiceProvider);
     navigatorKey = _navService.rootNavigatorKey;
     _viewRegistry = ref.read(viewRegistryProvider);
-
+    SystemNavigator.setFrameworkHandlesBack(true);
     WidgetsBinding.instance.addObserver(this);
 
     // Riverpodの状態変更時に通知(Stackだけを監視)
@@ -43,8 +41,6 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
         _pagesStack.clear();
         _tabsCache.clear();
         _navService.pageBuildCompleters.clear();
-        // // フラグを解除する
-        // _navService.setShouldClearCache(false);
       }
       notifyListeners();
     });
@@ -101,10 +97,7 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
         // ルートスタックから削除
         _pagesStack[_rootPageId]!.remove(page);
 
-        // 念の為buildが終わったタイミングでpopする
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _navService.systemPop(page.key.toStringValue());
-        });
+        _navService.systemPop(page.key.toStringValue());
       },
     );
   }
@@ -113,6 +106,56 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
   Future<void> setNewRoutePath(configuration) async {
     // 外部からルートセットする場合（ディープリンクや復元対応など）
     // 例: ref.read(navigationServiceProvider.notifier).setStack(...)
+  }
+
+  // BackButtonの制御(Androidのみ)
+  // RootBackButtonDispatcherから呼ばれる
+  @override
+  Future<bool> popRoute() async {
+    // 現在のNavigatorEntryを取得    
+    final navigatorEntry = _navService.getCurrentNavigatorEntry();
+    if(navigatorEntry == null){
+      // 存在しない場合は何もしない
+      return true;
+    }
+    // 現在のNavigatorStateを取得
+    var currentNavigator = navigatorEntry.navigatorKey.currentState;
+    if(currentNavigator == null){
+      return true;
+    }
+
+    // Navigatorの子が1つの場合はモーダルとしてPopを試みる
+    if(navigatorEntry.children.length == 1){
+      // モーダルスタックを取得
+      final modalStack = _navService.getModalStack();
+      // 現在のRouteを取得
+      Route<dynamic>? currentRoute;
+      // 現在のNavigatorの現在のRouteを取得
+      currentNavigator.popUntil((route) {
+        currentRoute = route;
+        return true;
+      });
+      // Popの判定には子RouteのpopDispositionを使用する
+      final popDisposition = currentRoute?.popDisposition ?? RoutePopDisposition.bubble;
+      final canPop = popDisposition != RoutePopDisposition.doNotPop;
+      // 子としてPopを試みる
+      await currentNavigator.maybePop();        
+     
+      // モーダルスタックが1つの場合でPop可能ならアプリを最小化する
+      if(modalStack.length == 1 && canPop){
+        // modalStackが1つの場合でPop可能ならアプリを最小化する
+        PlatformService.minimizeApp();        
+      }      
+      if(modalStack.length > 1 && canPop){
+        // モーダルが複数の場合モーダルとしてPopを試みる
+        navigatorKey.currentState?.maybePop();
+      }      
+      return true;
+    }
+
+    // Navigatorの子が複数ある場合は通常のPopを試みる
+    await currentNavigator.maybePop();
+    return true;
   }
 
   @override
@@ -216,7 +259,7 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
             return [ContentPage(child: const SizedBox.shrink())];
           }
           return _buildOrLoadContentPages(target).toList();
-        }));
+        }));        
         return Navigator(
           key: entry.navigatorKey,
           pages: pages,
