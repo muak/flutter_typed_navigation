@@ -1,6 +1,0 @@
-version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
-options: "8afb070a13d7563fa7bbedad82365c723d9a05c30da7dfe57f0fdf5008b3a5c4"
-build_start_time: [1750603383, 611617000]
-build_end_time: [1750603390, 106468000]
-inputs:
-  "/Volumes/SubSSD/Projects/Flutter/flutter_typed_navigation/ios/Classes/FlutterTypedNavigationPlugin.swift": [1750600184, 167418735]
