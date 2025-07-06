@@ -214,7 +214,7 @@ void main() {
     testWidgets('BackButton with PopScope canPop=true should call onPopInvokedWithResult and pop', (WidgetTester tester) async {
       final vmA = await base.setUpHomePage(tester);
       
-      // MockPopScopeViewModelに遷移（canPop=trueで開始）
+      // MockPopScopeViewModelに遷移
       base.navigationService.navigate<MockPopScopeViewModel>();
       await tester.pumpAndSettle(Duration(milliseconds: 100));
       
@@ -223,6 +223,10 @@ void main() {
       
       final vmPopScope = base.assertPageLifecycle<MockPopScopeViewModel>(['build','onActiveFirst','onActive']) as MockPopScopeViewModel;
       vmPopScope.isActive.shouldBeTrue(reason: 'MockPopScopeViewModelがアクティブ');
+      
+      // canPopをtrueに設定
+      vmPopScope.setCanPop(true);
+      await tester.pumpAndSettle(Duration(milliseconds: 100)); // UIの更新を待つ
       vmPopScope.canPop.shouldBeTrue(reason: 'canPopはtrueに設定されている');
       vmPopScope.onPopInvokedCalled.shouldBeFalse(reason: 'まだonPopInvokedWithResultは呼ばれていない');
       
@@ -246,7 +250,7 @@ void main() {
       vmPopScope.isDestroyed.shouldBeTrue(reason: 'MockPopScopeViewModelは破棄された');
     });
 
-    testWidgets('BackButton with PopScope canPop=false should call onPopInvokedWithResult and still pop', (WidgetTester tester) async {
+    testWidgets('BackButton with PopScope canPop=false should call onPopInvokedWithResult but not pop', (WidgetTester tester) async {
       final vmA = await base.setUpHomePage(tester);
       
       // MockPopScopeViewModelに遷移
@@ -255,9 +259,8 @@ void main() {
       
       final vmPopScope = base.assertPageLifecycle<MockPopScopeViewModel>(['build','onActiveFirst','onActive']) as MockPopScopeViewModel;
       
-      // canPopをfalseに設定
-      vmPopScope.setCanPop(false);
-      vmPopScope.canPop.shouldBeFalse(reason: 'canPopはfalseに設定されている');
+      // canPopはデフォルトでfalseなので、そのまま確認
+      vmPopScope.canPop.shouldBeFalse(reason: 'canPopはデフォルトでfalse');
       vmPopScope.resetOnPopInvokedCalled();
       
       base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
@@ -272,15 +275,16 @@ void main() {
       
       result.shouldBeTrue(reason: 'popRouteはtrueを返す');
       
-      // onPopInvokedWithResultが呼ばれ、canPop=falseでもプログラムからのpopRoute()では実際にPopされることを確認
+      // onPopInvokedWithResultが呼ばれたが、canPop=falseなので実際にはPopしていないことを確認
       vmPopScope.onPopInvokedCalled.shouldBeTrue(reason: 'onPopInvokedWithResultが呼ばれた');
       
-      // canPop=falseでもpopRoute()では実際にPopしてしまうことを確認
-      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
-      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
+      // canPop=falseなのでPopしていないことを確認
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つのまま');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,PopScopeの2つのまま');
       
-      vmA.isActive.shouldBeTrue(reason: 'MockAがアクティブに戻った');
-      vmPopScope.isDestroyed.shouldBeTrue(reason: 'MockPopScopeViewModelは破棄された');
+      vmA.isActive.shouldBeFalse(reason: 'MockAは非アクティブのまま');
+      vmPopScope.isActive.shouldBeTrue(reason: 'MockPopScopeViewModelはアクティブのまま');
+      vmPopScope.isDestroyed.shouldBeFalse(reason: 'MockPopScopeViewModelは破棄されていない');
     });
   });
 }
