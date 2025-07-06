@@ -11,7 +11,7 @@ class MockPopScopeScreen extends ConsumerWidget {
     final viewModel = ref.read(mockPopScopeViewModelProvider.notifier);
     
     return PopScope(
-      canPop: viewModel.canPop,
+      canPop: state.canPop,
       onPopInvokedWithResult: viewModel.onPopInvokedWithResult,
       child: Text(
         state.value,

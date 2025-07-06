@@ -12,6 +12,7 @@ part 'mock_popscope_viewmodel.freezed.dart';
 abstract class MockPopScopeState with _$MockPopScopeState {
   const factory MockPopScopeState({
     @Default('') String value,
+    @Default(false) bool canPop,
   }) = _MockPopScopeState;
 }
 
@@ -38,14 +39,13 @@ class MockPopScopeViewModel extends _$MockPopScopeViewModel
   @override
   Queue<String> actionLogQueue = Queue<String>();
 
-  bool _canPop = true;
   bool _onPopInvokedCalled = false;
 
-  bool get canPop => _canPop;
+  bool get canPop => state.canPop;
   bool get onPopInvokedCalled => _onPopInvokedCalled;
 
   void setCanPop(bool value) {
-    _canPop = value;
+    state = state.copyWith(canPop: value);
   }
 
   void onPopInvokedWithResult<T extends Object?>(bool didPop, T? result) {
