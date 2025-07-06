@@ -541,12 +541,6 @@ class InternalNavigationService extends Notifier<NavigationState>
     // ページが見つからない場合は何もしない
     if (path == null) return;
 
-    // 子ページが1つの場合は何もしない
-    final firstChild = state.findCurrentNavigatorFirstChildEntry();
-    if(firstChild == null || firstChild.pageId == pageId){
-      return;
-    }
-
     state = state
         .copyWithRemoveEntry(path)
         .copyWithUpdateCurrentPageBuildFlag(true)
