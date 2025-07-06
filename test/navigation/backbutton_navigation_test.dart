@@ -18,6 +18,11 @@ void main() {
 
     tearDown(() {
       base.tearDownTest();
+      // MethodChannelのモックハンドラーをクリーンアップ
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+        const MethodChannel('flutter_typed_navigation'),
+        null,
+      );
     });
 
     testWidgets('BackButton with single page should minimize app', (WidgetTester tester) async {
@@ -204,6 +209,78 @@ void main() {
       final vmC = base.assertPageLifecycle<MockCViewModel>(['build','onActiveFirst','onActive','onInActive','onActive']);
       vmC.isActive.shouldBeTrue(reason: 'MockCがアクティブに戻った');
       vmD.isDestroyed.shouldBeTrue(reason: 'MockDは破棄された');
+    });
+
+    testWidgets('BackButton with PopScope canPop=true should call onPopInvokedWithResult and pop', (WidgetTester tester) async {
+      final vmA = await base.setUpHomePage(tester);
+      
+      // MockPopScopeViewModelに遷移（canPop=trueで開始）
+      base.navigationService.navigate<MockPopScopeViewModel>();
+      await tester.pumpAndSettle(Duration(milliseconds: 100));
+      
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,PopScopeの2つ');
+      
+      final vmPopScope = base.assertPageLifecycle<MockPopScopeViewModel>(['build','onActiveFirst','onActive']) as MockPopScopeViewModel;
+      vmPopScope.isActive.shouldBeTrue(reason: 'MockPopScopeViewModelがアクティブ');
+      vmPopScope.canPop.shouldBeTrue(reason: 'canPopはtrueに設定されている');
+      vmPopScope.onPopInvokedCalled.shouldBeFalse(reason: 'まだonPopInvokedWithResultは呼ばれていない');
+      
+      // NavigationRouterDelegateの取得（MockAppから直接取得）
+      routerDelegate = base.mockApp.routerDelegate;
+      
+      // BackButtonの動作をシミュレート
+      final result = await routerDelegate.popRoute();
+      await tester.pumpAndSettle(Duration(milliseconds: 100));
+      
+      result.shouldBeTrue(reason: 'popRouteはtrueを返す');
+      
+      // onPopInvokedWithResultが呼ばれ、実際にPopしたことを確認
+      vmPopScope.onPopInvokedCalled.shouldBeTrue(reason: 'onPopInvokedWithResultが呼ばれた');
+      
+      // 戻ったかの確認
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
+      
+      vmA.isActive.shouldBeTrue(reason: 'MockAがアクティブに戻った');
+      vmPopScope.isDestroyed.shouldBeTrue(reason: 'MockPopScopeViewModelは破棄された');
+    });
+
+    testWidgets('BackButton with PopScope canPop=false should call onPopInvokedWithResult and still pop', (WidgetTester tester) async {
+      final vmA = await base.setUpHomePage(tester);
+      
+      // MockPopScopeViewModelに遷移
+      base.navigationService.navigate<MockPopScopeViewModel>();
+      await tester.pumpAndSettle(Duration(milliseconds: 100));
+      
+      final vmPopScope = base.assertPageLifecycle<MockPopScopeViewModel>(['build','onActiveFirst','onActive']) as MockPopScopeViewModel;
+      
+      // canPopをfalseに設定
+      vmPopScope.setCanPop(false);
+      vmPopScope.canPop.shouldBeFalse(reason: 'canPopはfalseに設定されている');
+      vmPopScope.resetOnPopInvokedCalled();
+      
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(2, reason: 'Navigatorの子要素はA,PopScopeの2つ');
+      
+      // NavigationRouterDelegateの取得（MockAppから直接取得）
+      routerDelegate = base.mockApp.routerDelegate;
+      
+      // BackButtonの動作をシミュレート
+      final result = await routerDelegate.popRoute();
+      await tester.pumpAndSettle(Duration(milliseconds: 100));
+      
+      result.shouldBeTrue(reason: 'popRouteはtrueを返す');
+      
+      // onPopInvokedWithResultが呼ばれ、canPop=falseでもプログラムからのpopRoute()では実際にPopされることを確認
+      vmPopScope.onPopInvokedCalled.shouldBeTrue(reason: 'onPopInvokedWithResultが呼ばれた');
+      
+      // canPop=falseでもpopRoute()では実際にPopしてしまうことを確認
+      base.modalStack.length.shouldBe(1, reason: 'Modalスタックは1つ');
+      base.getNavigatorEntry(0).children.length.shouldBe(1, reason: 'Navigatorの子要素はAの1つに戻った');
+      
+      vmA.isActive.shouldBeTrue(reason: 'MockAがアクティブに戻った');
+      vmPopScope.isDestroyed.shouldBeTrue(reason: 'MockPopScopeViewModelは破棄された');
     });
   });
 }

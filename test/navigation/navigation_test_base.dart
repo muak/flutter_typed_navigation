@@ -42,6 +42,8 @@ class NavigationTestBase {
             mockIViewModelProvider.notifier, () => const MockIScreen())
         .register<MockJViewModel>(
             mockJViewModelProvider.notifier, () => const MockJScreen())
+        .register<MockPopScopeViewModel>(
+            mockPopScopeViewModelProvider.notifier, () => const MockPopScopeScreen())
         .registerTab<MockTabbedViewModel>(mockTabbedViewModelProvider.notifier, (config) =>  MockTabbedScreen(config: config));
     });
 
