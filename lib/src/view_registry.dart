@@ -7,9 +7,9 @@ typedef ViewCreator = Widget Function();
 typedef ViewCreatorP = Widget Function(dynamic parameter);
 typedef TabCreator = Widget Function(TabConfigState config);
 typedef ViewModelCreatorP = ProviderListenable Function(dynamic parameter);
-typedef Registration = ({ProviderListenable viewModelProvider, ViewCreator viewCreator});
-typedef RegistrationP = ({ViewModelCreatorP viewModelCreator, ViewCreatorP viewCreator});
-typedef RegistrationTab = ({ProviderListenable viewModelProvider, TabCreator tabCreator});
+typedef Registration = ({ViewCreator viewCreator, ProviderListenable viewModelProvider});
+typedef RegistrationP = ({ViewCreatorP viewCreator, ViewModelCreatorP viewModelCreator});
+typedef RegistrationTab = ({TabCreator tabCreator, ProviderListenable viewModelProvider});
 typedef ViewModelProvider<T> = ProviderListenable<T> Function();
 
 class ViewRegistry{
@@ -27,18 +27,18 @@ class ViewRegistry{
     return _viewRegistry[viewModelType];
   }
   
-  ViewRegistry register<TViewModel>(ProviderListenable viewModelProvider, ViewCreator viewCreator) {
-    _viewRegistry[TViewModel.toString()] = (viewModelProvider: viewModelProvider, viewCreator: viewCreator);
+  ViewRegistry register<TViewModel>(ViewCreator viewCreator, ProviderListenable viewModelProvider) {
+    _viewRegistry[TViewModel.toString()] = (viewCreator: viewCreator, viewModelProvider: viewModelProvider);
     return this;
   }
 
-  ViewRegistry registerWithParameter<TViewModel>(ViewModelCreatorP viewModelCreator, ViewCreatorP viewCreator) {
-    _viewRegistry[TViewModel.toString()] = (viewModelCreator: viewModelCreator, viewCreator: viewCreator);
+  ViewRegistry registerWithParameter<TViewModel>(ViewCreatorP viewCreator, ViewModelCreatorP viewModelCreator) {
+    _viewRegistry[TViewModel.toString()] = (viewCreator: viewCreator, viewModelCreator: viewModelCreator);
     return this;
   }
 
-  ViewRegistry registerTab<TViewModel>(ProviderListenable viewModelProvider, TabCreator tabCreator) {
-    _viewRegistry[TViewModel.toString()] = (viewModelProvider: viewModelProvider, tabCreator: tabCreator);
+  ViewRegistry registerTab<TViewModel>(TabCreator tabCreator, ProviderListenable viewModelProvider) {
+    _viewRegistry[TViewModel.toString()] = (tabCreator: tabCreator, viewModelProvider: viewModelProvider);
     return this;
   }
 }

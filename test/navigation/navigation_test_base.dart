@@ -22,29 +22,29 @@ class NavigationTestBase {
     navigationService.register((regisgtry) {
       regisgtry
         .register<MockAViewModel>(
-            mockAViewModelProvider.notifier, () => const MockAScreen())
+            () => const MockAScreen(), mockAViewModelProvider.notifier)
         .registerWithParameter<MockBViewModel>(
-            (p) => mockBViewModelProvider(p).notifier,
-            (p) => MockBScreen(parameter: p))
+            (p) => MockBScreen(parameter: p),
+            (p) => mockBViewModelProvider(p).notifier)
         .register<MockCViewModel>(
-            mockCViewModelProvider.notifier, () => const MockCScreen())
+            () => const MockCScreen(), mockCViewModelProvider.notifier)
         .register<MockDViewModel>(
-            mockDViewModelProvider.notifier, () => const MockDScreen())
+            () => const MockDScreen(), mockDViewModelProvider.notifier)
         .register<MockEViewModel>(
-            mockEViewModelProvider.notifier, () => const MockEScreen())
+            () => const MockEScreen(), mockEViewModelProvider.notifier)
         .register<MockFViewModel>(
-            mockFViewModelProvider.notifier, () => const MockFScreen())
+            () => const MockFScreen(), mockFViewModelProvider.notifier)
         .register<MockGViewModel>(
-            mockGViewModelProvider.notifier, () => const MockGScreen())
+            () => const MockGScreen(), mockGViewModelProvider.notifier)
         .register<MockHViewModel>(
-            mockHViewModelProvider.notifier, () => const MockHScreen())
+            () => const MockHScreen(), mockHViewModelProvider.notifier)
         .register<MockIViewModel>(
-            mockIViewModelProvider.notifier, () => const MockIScreen())
+            () => const MockIScreen(), mockIViewModelProvider.notifier)
         .register<MockJViewModel>(
-            mockJViewModelProvider.notifier, () => const MockJScreen())
+            () => const MockJScreen(), mockJViewModelProvider.notifier)
         .register<MockPopScopeViewModel>(
-            mockPopScopeViewModelProvider.notifier, () => const MockPopScopeScreen())
-        .registerTab<MockTabbedViewModel>(mockTabbedViewModelProvider.notifier, (config) =>  MockTabbedScreen(config: config));
+            () => const MockPopScopeScreen(), mockPopScopeViewModelProvider.notifier)
+        .registerTab<MockTabbedViewModel>((config) =>  MockTabbedScreen(config: config), mockTabbedViewModelProvider.notifier);
     });
 
     startUp(navigationService.createAbsoluteBuilder()).setRoutes();
