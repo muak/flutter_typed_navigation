@@ -61,7 +61,7 @@ class AutoRegisterBuilder implements Builder {
     }
 
     if (registrations.isNotEmpty) {
-      final content = _generateFileContent(registrations, requiredImports);
+      final content = _generateFileContent(registrations, requiredImports, buildStep.inputId.package);
       final outputId = AssetId(buildStep.inputId.package, 'lib/auto_register.g.dart');
       await buildStep.writeAsString(outputId, content);
     }
@@ -78,7 +78,7 @@ class AutoRegisterBuilder implements Builder {
     return null;
   }
 
-  String _generateFileContent(List<String> registrations, Set<String> requiredImports) {
+  String _generateFileContent(List<String> registrations, Set<String> requiredImports, String packageName) {
     final buffer = StringBuffer();
     
     // 基本的なimport
@@ -91,10 +91,20 @@ class AutoRegisterBuilder implements Builder {
       if (importUri.startsWith('package:') || importUri.startsWith('dart:')) {
         buffer.writeln("import '$importUri';");
       } else {
-        // 相対パスの場合は適切に変換
-        final relativePath = importUri.startsWith('asset:') 
-          ? importUri.replaceFirst('asset:flutter_typed_navigation/', '')
-          : importUri;
+        // asset URIの場合は適切に変換
+        String relativePath = importUri;
+        if (importUri.startsWith('asset:')) {
+          final assetPrefix = 'asset:$packageName/';
+          if (importUri.startsWith(assetPrefix)) {
+            relativePath = importUri.replaceFirst(assetPrefix, '');
+          } else {
+            // 他のパッケージのasset URIの場合はそのまま使用
+            // この場合は通常package:形式になるべきだが、念のため警告を出す
+            print('Warning: Unexpected asset URI format: $importUri');
+            continue;
+          }
+        }
+        
         if (relativePath.startsWith('lib/')) {
           buffer.writeln("import '${relativePath.substring(4)}';");
         } else {
