@@ -146,12 +146,15 @@ class ViewRegistryGenerator extends GeneratorForAnnotation<RegisterFor> {
   }
 
   String _getProviderName(String viewModelName) {
-    // ViewModelの名前からProviderの名前を推測
-    // 例: TestViewModel -> testViewModelProvider
-    // 例: AlphaParamViewModel -> alphaParamViewModelProvider
-    final baseName = viewModelName.replaceFirst('ViewModel', '');
-    final camelCaseName = baseName[0].toLowerCase() + baseName.substring(1);
-    return '${camelCaseName}ViewModelProvider';
+    // ViewModelの名前からProviderの名前を生成
+    // 例: HomeViewModel -> homeViewModelProvider
+    // 例: SomeFooBar -> someFooBarProvider
+    if (viewModelName.isEmpty) {
+      throw ArgumentError('viewModelName cannot be empty');
+    }
+    
+    final camelCaseName = viewModelName[0].toLowerCase() + viewModelName.substring(1);
+    return '${camelCaseName}Provider';
   }
 }
 
