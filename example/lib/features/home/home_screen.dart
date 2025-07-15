@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';
 import 'home_viewmodel.dart';
 
+@RegisterFor<HomeViewModel>()
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 

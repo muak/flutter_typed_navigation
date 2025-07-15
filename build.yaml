@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      flutter_typed_navigation|auto_register_builder:
+        enabled: true
+        
+builders:
+  auto_register_builder:
+    import: "package:flutter_typed_navigation/src/generators/auto_register_builder.dart"
+    builder_factories: ["autoRegisterBuilder"]
+    build_extensions: 
+      "$lib$": ["auto_register.g.dart"]
+    auto_apply: all_packages
+    build_to: source
+    runs_before: ["json_serializable", "freezed"] 

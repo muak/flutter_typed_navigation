@@ -27,3 +27,6 @@ export 'src/platform_service.dart';
 
 // Navigation app
 export 'src/navigation_app.dart';
+
+// Annotations
+export 'src/annotations.dart';
