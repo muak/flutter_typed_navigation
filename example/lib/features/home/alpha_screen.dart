@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';
 import 'alpha_viewmodel.dart';
 
+@RegisterFor<AlphaViewModel>()
 class AlphaScreen extends ConsumerWidget {
   const AlphaScreen({super.key});
 

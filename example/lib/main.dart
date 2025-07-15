@@ -4,13 +4,17 @@ import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';
 import 'app.dart';
 import 'features/viewmodels.dart';
 import 'features/screens.dart';
+import 'auto_register.g.dart';
 
 void main() {
   final container = ProviderContainer();
   final navigationService = container.read(navigationServiceProvider);
   navigationService.register((regisgtry) {
+    // 自動生成されたコードを使用
+    regisgtry.registerAuto();
+    
+    // 残りの手動登録
     regisgtry
-    .register<HomeViewModel>(() => const HomeScreen(), homeViewModelProvider.notifier)    
     .registerWithParameter<HomeDetailViewModel>((p) => HomeDetailScreen(p), (p)=>homeDetailViewModelProvider(p).notifier)
     .register<SettingsViewModel>(() => const SettingsScreen(), settingsViewModelProvider.notifier)
     .register<AccountSettingsViewModel>(() => const AccountSettingsScreen(), accountSettingsViewModelProvider.notifier)
@@ -18,12 +22,9 @@ void main() {
     .register<SheetResultViewModel>(() => const SheetResultScreen(), sheetResultViewModelProvider.notifier)
     .registerWithParameter<SheetParamViewModel>((p) => SheetParamScreen(param: p), (p)=>sheetParamViewModelProvider(p).notifier)
     .registerWithParameter<SheetParamResultViewModel>((p) => SheetParamResultScreen(param: p), (p)=>sheetParamResultViewModelProvider(p).notifier)
-    .register<AlphaViewModel>(() => const AlphaScreen(), alphaViewModelProvider.notifier)
     .register<AlphaResultViewModel>(() => const AlphaResultScreen(), alphaResultViewModelProvider.notifier)
-    .registerWithParameter<AlphaParamViewModel>((p) => AlphaParamScreen(p), (p)=>alphaParamViewModelProvider(p).notifier)
     .registerWithParameter<AlphaParamResultViewModel>((p) => AlphaParamResultScreen(param: p), (p)=>alphaParamResultViewModelProvider(p).notifier)
     .register<BetaViewModel>(() => const BetaScreen(), betaViewModelProvider.notifier)
-    .registerTab<TabRootViewModel>((p) => TabRootScreen(config: p), tabRootViewModelProvider.notifier)
     .register<ModalHomeViewModel>(() => const ModalHomeScreen(), modalHomeViewModelProvider.notifier)
     .register<ModalAlphaViewModel>(() => const ModalAlphaScreen(), modalAlphaViewModelProvider.notifier)
     .registerWithParameter<ModalResultViewModel>((p) => ModalResultScreen(p), (p)=>modalResultViewModelProvider(p).notifier)

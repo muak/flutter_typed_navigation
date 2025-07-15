@@ -3,10 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';
+import 'tab_root_viewmodel.dart';
 
-
-
-
+@RegisterFor<TabRootViewModel>()
 class TabRootScreen extends TabBaseWidget {
   const TabRootScreen({super.key, required super.config});
 
