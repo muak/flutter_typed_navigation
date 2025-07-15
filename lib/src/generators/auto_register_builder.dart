@@ -81,9 +81,7 @@ class AutoRegisterBuilder implements Builder {
   String _generateFileContent(List<String> registrations, Set<String> requiredImports, String packageName) {
     final buffer = StringBuffer();
     
-    // 基本的なimport
-    buffer.writeln("import 'package:flutter/widgets.dart';");
-    buffer.writeln("import 'package:flutter_riverpod/flutter_riverpod.dart';");
+    // 必要最小限のimport
     buffer.writeln("import 'package:flutter_typed_navigation/flutter_typed_navigation.dart';");
     
     // 必要なimportを追加
