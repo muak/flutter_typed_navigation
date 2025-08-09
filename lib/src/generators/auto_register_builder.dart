@@ -29,34 +29,40 @@ class AutoRegisterBuilder implements Builder {
         continue; // 生成されたファイルはスキップ
       }
 
-      final library = await buildStep.resolver.libraryFor(assetId);
-      
-      for (final element in library.topLevelElements) {
-        if (element is ClassElement) {
-          final registerForAnnotation = _getRegisterForAnnotation(element);
-          if (registerForAnnotation != null) {
-            try {
-              final registration = await generator.generateForAnnotatedElement(
-                element,
-                registerForAnnotation,
-                buildStep,
-              );
-              registrations.add(registration);
-              
-              // 必要なimportを追加
-              requiredImports.add(assetId.uri.toString());
-              
-              // ViewModelの型情報を取得してimportを追加
-              final viewModelTypeInfo = generator.getViewModelType(registerForAnnotation);
-              if (viewModelTypeInfo?.libraryUri != null) {
-                requiredImports.add(viewModelTypeInfo!.libraryUri!);
+      try {
+        final library = await buildStep.resolver.libraryFor(assetId);
+        
+        for (final element in library.topLevelElements) {
+          if (element is ClassElement) {
+            final registerForAnnotation = _getRegisterForAnnotation(element);
+            if (registerForAnnotation != null) {
+              try {
+                final registration = await generator.generateForAnnotatedElement(
+                  element,
+                  registerForAnnotation,
+                  buildStep,
+                );
+                registrations.add(registration);
+                
+                // 必要なimportを追加
+                requiredImports.add(assetId.uri.toString());
+                
+                // ViewModelの型情報を取得してimportを追加
+                final viewModelTypeInfo = generator.getViewModelType(registerForAnnotation);
+                if (viewModelTypeInfo?.libraryUri != null) {
+                  requiredImports.add(viewModelTypeInfo!.libraryUri!);
+                }
+              } catch (e) {
+                // エラーは無視して次の要素に進む
+                print('Warning: Failed to generate registration for ${element.name}: $e');
               }
-            } catch (e) {
-              // エラーは無視して次の要素に進む
-              print('Warning: Failed to generate registration for ${element.name}: $e');
             }
           }
         }
+      } catch (e) {
+        // partファイルなどライブラリとして読み込めないファイルをスキップ
+        print('Warning: Could not load library for ${assetId.path}: $e');
+        continue;
       }
     }
 

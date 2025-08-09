@@ -14,7 +14,7 @@ class _ModalPageRoute<T> extends PageRoute<T> {
   bool get opaque => false;
 
   @override
-  Color? get barrierColor => Colors.black54;
+  Color? get barrierColor => null;
 
   @override
   String? get barrierLabel => null;
@@ -23,10 +23,10 @@ class _ModalPageRoute<T> extends PageRoute<T> {
   bool get maintainState => true;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 300);
+  Duration get transitionDuration => const Duration(milliseconds: 350);
 
   @override
-  Duration get reverseTransitionDuration => const Duration(milliseconds: 300);
+  Duration get reverseTransitionDuration => const Duration(milliseconds: 400);
 
   @override
   Widget buildPage(
@@ -43,41 +43,33 @@ class _ModalPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    // SlideUp animation for modal appearance
+  ) {   
+    // SlideUp animation for modal appearance with enhanced smoothness
     const begin = Offset(0.0, 1.0); // Start from bottom
     const end = Offset.zero; // End at center
-    const curve = Curves.easeInOut;
 
-    // 開始アニメーションが無効化されている場合
-    if (disableStartAnimation) {
-      // 開始時は即座に完成状態、終了時は通常のアニメーション
-      final effectiveAnimation = animation.status == AnimationStatus.reverse 
-          ? animation  // 終了アニメーション時は通常のアニメーションを使用
-          : const AlwaysStoppedAnimation(1.0);  // 開始時は完了状態で固定
+    // より滑らかなカーブを使用（Material Designのstandard curve）
+    const curve = Curves.fastOutSlowIn;
+    const fadeCurve = Curves.easeInOut;
 
-      final tween = Tween(begin: begin, end: end).chain(
-        CurveTween(curve: curve),
-      );
-
-      final offsetAnimation = effectiveAnimation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    }
-
-    // 通常のアニメーション
-    final tween = Tween(begin: begin, end: end).chain(
-      CurveTween(curve: curve),
+    // スライドとフェードを組み合わせてより滑らかに
+    final slideAnimation = animation.drive(
+      Tween(begin: begin, end: end).chain(CurveTween(curve: curve)),
     );
 
-    final offsetAnimation = animation.drive(tween);
+    // フェードアニメーションを少し遅らせて開始することで、より自然な印象に
+    final fadeAnimation = animation.drive(
+      Tween(begin: 0.0, end: 1.0).chain(
+        CurveTween(curve: const Interval(0.0, 0.8, curve: fadeCurve)),
+      ),
+    );
 
     return SlideTransition(
-      position: offsetAnimation,
-      child: child,
+      position: slideAnimation,
+      child: FadeTransition(
+        opacity: fadeAnimation,
+        child: child,
+      ),
     );
   }
 }
@@ -92,12 +84,41 @@ class EmptyPage extends MaterialPage {
   }
 }
 
+class _SmartContentPageRoute<T> extends MaterialPageRoute<T> {
+  _SmartContentPageRoute({
+    required super.builder,
+    required RouteSettings settings,
+  }) : super(settings: settings);
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // 親Navigatorが閉じられているかを判定
+    // 親が閉じられている場合はsecondaryAnimationがforwardかcompletedになる
+    final isParentClosing = secondaryAnimation.status == AnimationStatus.forward ||
+                           secondaryAnimation.status == AnimationStatus.completed;
+    
+    if (isParentClosing) {
+      // 親が閉じられている場合：アニメーション無効化
+      // 無効化しないと親と子のアニメーションが同時に実行されてしまう
+      return child;
+    }
+    
+    // 通常の遷移：MaterialPageRouteのデフォルト動作
+    return super.buildTransitions(context, animation, secondaryAnimation, child);
+  }  
+}
+
 class ContentPage extends MaterialPage {
   const ContentPage({required super.child, super.key});
 
   @override
   Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
+    return _SmartContentPageRoute(
       settings: this,
       builder: (context) => child,
     );
