@@ -69,7 +69,7 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
       if (_navService.pageBuildCompleters.containsKey(pageId)) {
         debugPrint('pageBuildCompleters[$pageId] complete');
         _navService.pageBuildCompleters[pageId]?.complete(true);
-        _navService.pageBuildCompleters.remove(pageId);
+        _navService.pageBuildCompleters.remove(pageId);       
       }
     });   
 
@@ -96,7 +96,7 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
         }
         // ルートスタックから削除
         _pagesStack[_rootPageId]!.remove(page);
-
+        
         _navService.systemPop(page.key.toStringValue());
       },
     );
@@ -355,7 +355,10 @@ class NavigationRouterDelegate extends RouterDelegate<Empty>
         final target = state.stack
             .whereType<TabEntry>()
             .lastWhereOrNull((e) => e.pageId == pageId);
-        if (target == null) return [const SizedBox.shrink()];
+
+        // タブが存在しない場合はキャッシュを返す
+        // (ページが閉じられた場合などですぐにshrinkすると遷移アニメーション中に空白が描画されてしまうため)
+        if (target == null) return _tabsCache[pageId] ?? [const SizedBox.shrink()];
 
         if (!_tabsCache.containsKey(pageId)) {
           _tabsCache[pageId] = [];
